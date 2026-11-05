@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>幼安 · 芯片与硬件的网址清单</title>
+<meta name="description" content="一份手工整理的硬件网址清单：芯片厂商、硬件媒体、参数评测、攒机购买与社区，每条只写它什么时候有用。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20fill='%23FFFFFF'/%3E%3Crect%20x='6.5'%20y='6.5'%20width='19'%20height='19'%20fill='none'%20stroke='%231A1A16'%20stroke-width='1.4'/%3E%3Crect%20x='12'%20y='12'%20width='8'%20height='8'%20fill='%231E5A4C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="preconnect" href="https://sf3-scmcdn-cn.feishucdn.com" crossorigin>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600&amp;family=Noto+Sans+SC:wght@400;500&amp;display=swap">
+<style>
+:root{
+  --ink:#2A2130;
+  --ink-soft:#5C5266;
+  --ink-mute:#8E8696;
+  --line:#EAE6F0;
+  --paper:#FFFFFF;
+  --tint:#FAF7FC;
+  --seal:#9B59B6;
+  --banner-1:#B388D4;
+  --banner-2:#E8A0C8;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+button{font-family:inherit}
+:focus-visible{outline:1.5px solid var(--seal);outline-offset:3px}
+
+/* ===== 顶部横幅 ===== */
+.hero{
+  position:relative;
+  background:linear-gradient(135deg,var(--banner-1) 0%,var(--banner-2) 100%);
+  padding:56px 24px 64px;
+  text-align:center;
+}
+.avatar{
+  width:96px;height:96px;border-radius:50%;
+  background:#fff;
+  border:4px solid #fff;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+  margin:0 auto 16px;
+  display:grid;place-items:center;
+  font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-size:40px;font-weight:600;color:var(--seal);
+}
+.site-name{
+  margin:0;
+  font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:600;font-size:34px;letter-spacing:.12em;color:#fff;
+  text-shadow:0 2px 10px rgba(80,30,90,.25);
+}
+.site-bio{
+  margin:10px auto 0;max-width:28em;
+  color:rgba(255,255,255,.92);font-size:14px;line-height:1.8;
+}
+
+/* ===== 顶部导航 ===== */
+.topnav{
+  position:sticky;top:0;z-index:10;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  display:flex;justify-content:center;gap:32px;
+  padding:14px 16px;
+}
+.topnav a{
+  text-decoration:none;color:var(--ink-soft);font-size:14px;
+  padding:4px 0;position:relative;
+}
+.topnav a:hover{color:var(--ink)}
+.topnav a.active{color:var(--ink);font-weight:500}
+.topnav a.active::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--seal);
+}
+
+/* ===== 主内容 ===== */
+main{padding:0 24px}
+.content{max-width:760px;margin:0 auto;padding:48px 0 100px}
+.view{animation:viewin .22s ease-out both}
+@keyframes viewin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view{animation:none}}
+
+.page-title{
+  margin:0;font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:600;font-size:30px;line-height:1.3;letter-spacing:.03em;
+}
+.page-sub{
+  margin:16px 0 0;max-width:35em;font-size:14px;line-height:1.9;color:var(--ink-mute);
+}
+
+.section{margin-top:56px}
+.section-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  padding-bottom:10px;border-bottom:1px solid var(--ink);
+}
+.section-head h2{
+  margin:0;font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:600;font-size:19px;letter-spacing:.05em;
+}
+.section-head .meta{font-size:13px;color:var(--ink-mute);white-space:nowrap}
+
+/* ===== 链接行 ===== */
+.list{margin:0}
+.row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  column-gap:24px;
+  padding:19px 0;
+  border-bottom:1px solid var(--line);
+}
+.row:hover{background:var(--tint)}
+.row-link{display:block;text-decoration:none;min-width:0}
+.row-name{
+  display:inline-block;
+  font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:600;font-size:19px;line-height:1.4;letter-spacing:.02em;
+  text-decoration:underline;text-decoration-color:transparent;
+  text-decoration-thickness:1px;text-underline-offset:5px;
+}
+.row:hover .row-name,.row:focus-within .row-name{text-decoration-color:var(--ink)}
+.row-desc{
+  margin-top:5px;font-size:14px;line-height:1.75;color:var(--ink-soft);
+}
+.row-domain{
+  padding-top:3px;font-size:13px;color:var(--ink-mute);
+  white-space:nowrap;text-align:right;
+}
+.row-acts{display:flex;align-items:center;gap:2px;padding-top:1px}
+.star{
+  width:36px;height:36px;padding:0;display:grid;place-items:center;
+  background:none;border:0;cursor:pointer;color:var(--ink-mute);
+}
+.star svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.5}
+.star:hover{color:var(--seal)}
+.star.on{color:var(--seal)}
+.star.on svg{fill:var(--seal);stroke:var(--seal)}
+.open-btn{
+  width:36px;height:36px;display:grid;place-items:center;
+  color:var(--ink-mute);text-decoration:none;
+}
+.open-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6}
+.open-btn:hover{color:var(--ink)}
+
+/* ===== 分类概览 ===== */
+.cat-row{
+  display:grid;grid-template-columns:9em minmax(0,1fr) auto;
+  column-gap:24px;align-items:baseline;
+  padding:18px 0;border-bottom:1px solid var(--line);
+  text-decoration:none;
+}
+.cat-row:hover{background:var(--tint)}
+.cat-name{
+  font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:600;font-size:17px;letter-spacing:.04em;
+}
+.cat-note{font-size:14px;color:var(--ink-soft)}
+.cat-num{font-size:13px;color:var(--ink-mute);white-space:nowrap}
+
+/* ===== 搜索与筛选 ===== */
+.search-row{
+  display:flex;align-items:center;gap:12px;
+  margin-top:32px;padding-bottom:10px;border-bottom:1px solid var(--ink);
+}
+.search-row svg{width:16px;height:16px;flex:none;fill:none;stroke:var(--ink-mute);stroke-width:1.6}
+#q{
+  flex:1;min-width:0;border:0;outline:0;background:transparent;
+  padding:6px 0;font:inherit;font-size:16px;color:var(--ink);
+}
+#q::placeholder{color:var(--ink-mute)}
+#q::-webkit-search-cancel-button{display:none}
+.clear{
+  border:0;background:none;padding:4px;font-size:13px;color:var(--ink-mute);
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+}
+.chips{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:18px}
+.chip{
+  position:relative;border:0;background:none;padding:4px 0;
+  font-size:13px;color:var(--ink-mute);cursor:pointer;
+}
+.chip:hover{color:var(--ink)}
+.chip.on{color:var(--ink)}
+.chip.on::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--seal);
+}
+.group{margin-top:44px}
+.group-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding-bottom:8px;
+}
+.group-head h3{
+  margin:0;font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:600;font-size:16px;letter-spacing:.05em;
+}
+.group-head span{font-size:13px;color:var(--ink-mute)}
+.empty{
+  padding:56px 0;font-size:14px;color:var(--ink-mute);
+  border-bottom:1px solid var(--line);
+}
+.empty button{
+  display:inline-block;margin-top:14px;padding:0;
+  border:0;background:none;font-size:14px;color:var(--ink);cursor:pointer;
+  text-decoration:underline;text-underline-offset:4px;
+}
+
+/* ===== 关于 ===== */
+.prose{margin-top:30px;max-width:35em}
+.prose p{margin:0 0 20px;font-size:14px;line-height:1.95;color:var(--ink-soft)}
+.prose p:first-child{color:var(--ink)}
+
+.form-block{margin-top:60px}
+.form{margin-top:26px;max-width:520px}
+.field{margin-bottom:22px}
+.field label{display:block;margin-bottom:6px;font-size:13px;color:var(--ink-mute)}
+.field input,.field select,.field textarea{
+  width:100%;border:0;border-bottom:1px solid var(--line);
+  background:transparent;padding:7px 0;
+  font-family:inherit;font-size:16px;line-height:1.6;color:var(--ink);
+  border-radius:0;outline:0;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-bottom-color:var(--ink)}
+.field textarea{resize:vertical;min-height:52px}
+.form-error{margin:0 0 16px;min-height:1.4em;font-size:13px;color:var(--seal)}
+.submit{
+  border:0;background:var(--ink);color:#fff;
+  padding:11px 24px;font-size:14px;letter-spacing:.08em;cursor:pointer;
+}
+.submit:hover{background:#3A3340}
+.drafts-wrap{margin-top:44px}
+.drafts-wrap[hidden]{display:none}
+.drafts-wrap h3{
+  margin:0 0 4px;font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:600;font-size:16px;letter-spacing:.05em;
+}
+.draft{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:13px 0;border-bottom:1px solid var(--line);
+}
+.draft p{margin:0;min-width:0;font-size:14px;color:var(--ink-soft);line-height:1.7}
+.draft strong{
+  display:block;font-weight:600;font-size:14px;color:var(--ink);
+}
+.draft button{
+  flex:none;border:0;background:none;padding:4px;font-size:13px;
+  color:var(--ink-mute);cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+}
+
+/* ===== toast ===== */
+.toast{
+  position:fixed;left:50%;bottom:32px;transform:translate(-50%,10px);
+  background:var(--ink);color:#fff;padding:10px 20px;
+  font-size:13px;letter-spacing:.04em;
+  opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+  z-index:20;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ===== 窄屏 ===== */
+@media (max-width:640px){
+  .hero{padding:40px 20px 48px}
+  .avatar{width:80px;height:80px;font-size:34px;margin-bottom:14px}
+  .site-name{font-size:26px}
+  .site-bio{font-size:13px}
+  .topnav{gap:20px;padding:12px 12px;overflow-x:auto}
+  main{padding:0 18px}
+  .content{padding:36px 0 72px}
+  .page-title{font-size:24px}
+  .section{margin-top:44px}
+  .row{grid-template-columns:minmax(0,1fr) auto;padding:15px 0}
+  .row-domain{
+    grid-column:1;grid-row:2;text-align:left;padding-top:6px;font-size:12px;
+  }
+  .row-acts{grid-column:2;grid-row:1 / span 2;align-self:center}
+  .row-name{font-size:17px}
+  .cat-row{grid-template-columns:1fr auto;row-gap:5px;padding:14px 0}
+  .cat-row .cat-note{grid-column:1 / -1}
+  .cat-num{grid-column:2;grid-row:1}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="avatar" aria-hidden="true">幼</div>
+    <h1 class="site-name">幼安</h1>
+    <p class="site-bio">芯片、显卡、整机，常看的站点都在这里。</p>
+  </header>
+
+  <nav class="topnav" aria-label="主导航">
+    <a href="#/" data-nav="home">首页</a>
+    <a href="#/all" data-nav="all">全部链接</a>
+    <a href="#/saved" data-nav="saved">收藏</a>
+    <a href="#/about" data-nav="about">关于</a>
+  </nav>
+
+  <main>
+    <div class="content">
+
+  <main>
+    <div class="content">
+
+      <!-- ===== 视图：首页 ===== -->
+      <section class="view" id="view-home">
+        <p class="page-sub" style="margin-top:0">这里留了 <span id="total-count"></span> 个站点，分五类，每条写一句它最值得看的地方。</p>
+
+        <section class="section">
+          <div class="section-head">
+            <h2>常打开的</h2>
+            <span class="meta">从清单里挑的六个</span>
+          </div>
+          <div class="list" id="home-list"></div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2>按类别找</h2>
+            <span class="meta">点进去看这一类</span>
+          </div>
+          <div id="home-cats"></div>
+        </section>
+      </section>
+
+      <!-- ===== 视图：全部链接 ===== -->
+      <section class="view" id="view-all" hidden>
+        <h2 class="page-title">全部链接</h2>
+        <p class="page-sub" id="all-sub"></p>
+
+        <div class="search-row">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>
+          <input id="q" type="search" placeholder="搜站点名、用途或域名" aria-label="搜索链接" autocomplete="off">
+          <button class="clear" id="q-clear" type="button" hidden>清除</button>
+        </div>
+        <div class="chips" id="chips" role="group" aria-label="按类别筛选"></div>
+        <div id="all-results"></div>
+      </section>
+
+      <!-- ===== 视图：收藏 ===== -->
+      <section class="view" id="view-saved" hidden>
+        <h2 class="page-title">收藏</h2>
+        <p class="page-sub">只存在这台设备的浏览器里，换电脑或换浏览器不会跟过去。</p>
+        <div id="saved-list" style="margin-top:44px"></div>
+      </section>
+
+      <!-- ===== 视图：关于 ===== -->
+      <section class="view" id="view-about" hidden>
+        <h2 class="page-title">关于这个站</h2>
+        <div class="prose">
+          <p>幼安是一份硬件相关的网址清单。厂商官网、评测媒体、参数库、攒机工具和社区，各留几个，每条只写一句它在什么时候有用。</p>
+          <p>清单靠手动更新，条目不追多。打不开的会换掉，过时的会删掉，所以留下来的通常还能用。</p>
+          <p>它没有账号，也不联网保存。收藏和投稿都只写在这台设备的浏览器里，清缓存就没了。</p>
+        </div>
+
+        <section class="section form-block">
+          <div class="section-head">
+            <h2>加一条</h2>
+            <span class="meta">先存在本机</span>
+          </div>
+
+          <form class="form" id="add-form" novalidate>
+            <div class="field">
+              <label for="f-name">站点名</label>
+              <input id="f-name" name="name" type="text" maxlength="40" placeholder="例如：超能网">
+            </div>
+            <div class="field">
+              <label for="f-url">网址</label>
+              <input id="f-url" name="url" type="url" placeholder="https://">
+            </div>
+            <div class="field">
+              <label for="f-cat">类别</label>
+              <select id="f-cat" name="cat"></select>
+            </div>
+            <div class="field">
+              <label for="f-note">一句说明（可不填）</label>
+              <textarea id="f-note" name="note" rows="2" maxlength="80" placeholder="它能解决什么"></textarea>
+            </div>
+            <p class="form-error" id="form-error" role="alert" aria-live="polite"></p>
+            <button class="submit" type="submit">存到待收录</button>
+          </form>
+
+          <div class="drafts-wrap" id="drafts-wrap" hidden>
+            <h3>待收录</h3>
+            <div id="drafts"></div>
+          </div>
+        </section>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ===== 数据：22 个站点 ===== */
+const CATS = [
+  {key:'chip', label:'芯片厂商', note:'厂商自己的规格页和产品线，型号对不上时先回这里查。'},
+  {key:'media', label:'硬件媒体', note:'新闻和首批评测，中英文都有。'},
+  {key:'data', label:'参数与评测', note:'跑分、参数库和真实占用率，用来判断一条消息靠不靠谱。'},
+  {key:'build', label:'攒机与购买', note:'选件、比价和查兼容性的工具。'},
+  {key:'community', label:'社区', note:'攒机方案和二手行情，别人踩过的坑都在帖子里。'}
+];
+
+const DATA = [
+  {id:'amd', cat:'chip', featured:true, name:'AMD 官网',
+   url:'https://www.amd.com/zh-cn', host:'amd.com',
+   desc:'锐龙和 Radeon 的官方规格页，核心数、频率、接口都以这里为准。'},
+  {id:'nvidia', cat:'chip', name:'NVIDIA 中国官网',
+   url:'https://www.nvidia.cn/', host:'nvidia.cn',
+   desc:'GeForce 与 RTX 系列的参数、驱动和 Studio 版本下载入口。'},
+  {id:'intel', cat:'chip', name:'Intel 中国官网',
+   url:'https://www.intel.cn/', host:'intel.cn',
+   desc:'酷睿处理器的规格和芯片组文档，换平台前先查兼容列表。'},
+  {id:'qualcomm', cat:'chip', name:'高通中国',
+   url:'https://www.qualcomm.cn/', host:'qualcomm.cn',
+   desc:'骁龙各型号的对照表，手机芯片的命名能在这里对上号。'},
+  {id:'tsmc', cat:'chip', name:'台积电',
+   url:'https://www.tsmc.com/', host:'tsmc.com',
+   desc:'制程节点与产能布局的官方说明，看一颗芯片是谁造的从这查。'},
+
+  {id:'techpowerup', cat:'media', featured:true, name:'TechPowerUp',
+   url:'https://www.techpowerup.com/', host:'techpowerup.com',
+   desc:'显卡规格数据库和首批评测，同一张卡的真实参数这里最全。'},
+  {id:'videocardz', cat:'media', featured:true, name:'VideoCardz',
+   url:'https://videocardz.com/', host:'videocardz.com',
+   desc:'显卡新闻和规格消息的汇总，新卡发布前多半先在这里出现。'},
+  {id:'tomshardware', cat:'media', name:"Tom's Hardware",
+   url:'https://www.tomshardware.com/', host:'tomshardware.com',
+   desc:'英文硬件评测，测试方法和数据表列得比新闻细。'},
+  {id:'expreview', cat:'media', featured:true, name:'超能网',
+   url:'https://www.expreview.com/', host:'expreview.com',
+   desc:'中文硬件评测，显卡天梯图和功耗实测更新得勤。'},
+  {id:'ithome', cat:'media', name:'IT之家',
+   url:'https://www.ithome.com/', host:'ithome.com',
+   desc:'科技新闻更新快，硬件新品和驱动更新能第一时间看到。'},
+  {id:'mydrivers', cat:'media', name:'快科技',
+   url:'https://www.mydrivers.com/', host:'mydrivers.com',
+   desc:'硬件与数码资讯，标题直白，适合快速扫一遍当天的事。'},
+
+  {id:'passmark', cat:'data', featured:true, name:'PassMark',
+   url:'https://www.passmark.com/', host:'passmark.com',
+   desc:'CPU 和显卡的跑分数据库，同型号的分数可以直接横比。'},
+  {id:'notebookcheck', cat:'data', name:'Notebookcheck',
+   url:'https://www.notebookcheck.net/', host:'notebookcheck.net',
+   desc:'笔记本的详细评测，屏幕色准和散热数据都会实测。'},
+  {id:'steamsurvey', cat:'data', name:'Steam 硬件调查',
+   url:'https://store.steampowered.com/hwsurvey/', host:'store.steampowered.com',
+   desc:'玩家实际在用的显卡和 CPU 占比，判断主流配置看这个。'},
+  {id:'wikichip', cat:'data', name:'WikiChip',
+   url:'https://en.wikichip.org/', host:'en.wikichip.org',
+   desc:'芯片架构与微架构条目，查一代核心的代号和规格。'},
+  {id:'cpumonkey', cat:'data', name:'CPU-Monkey',
+   url:'https://www.cpu-monkey.com/', host:'cpu-monkey.com',
+   desc:'CPU 型号参数对照，同代不同型号的差异列在一张表里。'},
+
+  {id:'pcpartpicker', cat:'build', featured:true, name:'PCPartPicker',
+   url:'https://pcpartpicker.com/', host:'pcpartpicker.com',
+   desc:'选配件时自动查兼容性和价格，配置单可以存在这里。'},
+  {id:'zol', cat:'build', name:'中关村在线',
+   url:'https://www.zol.com.cn/', host:'zol.com.cn',
+   desc:'硬件参数库和报价，老型号也能翻到详细规格。'},
+  {id:'smzdm', cat:'build', name:'什么值得买',
+   url:'https://www.smzdm.com/', host:'smzdm.com',
+   desc:'硬件好价和晒单，促销期能看到历史价格。'},
+  {id:'jd', cat:'build', name:'京东',
+   url:'https://www.jd.com/', host:'jd.com',
+   desc:'自营配件的价格和售后，装机件常在这比价。'},
+
+  {id:'reddit', cat:'community', name:'Reddit · r/buildapc',
+   url:'https://www.reddit.com/r/buildapc/', host:'reddit.com',
+   desc:'英文攒机社区，配置单发上去会有人指出瓶颈。'},
+  {id:'chiphell', cat:'community', name:'Chiphell',
+   url:'https://www.chiphell.com/', host:'chiphell.com',
+   desc:'中文硬件玩家论坛，开箱和改造的帖子多。'},
+  {id:'tieba', cat:'community', name:'图拉丁吧',
+   url:'https://tieba.baidu.com/f?kw=%E5%9B%BE%E6%8B%89%E4%B8%81', host:'tieba.baidu.com',
+   desc:'二手和矿卡的集散地，捡便宜配件前先看行情。'},
+  {id:'bilibili', cat:'community', name:'哔哩哔哩',
+   url:'https://www.bilibili.com/', host:'bilibili.com',
+   desc:'装机视频和实测帧数，看实际表现比看参数直观。'}
+];
+
+const STORE = {saved:'liuzhi.saved.v1', drafts:'liuzhi.drafts.v1'};
+
+/* ===== 常量 ===== */
+const VIEWS = ['home','all','saved','about'];
+const CAT_LABEL = {};
+CATS.forEach(c => { CAT_LABEL[c.key] = c.label; });
+const ARROW_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8.5 7H17V15.5"/></svg>';
+const STAR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4L14.95 8.7L22 9.55L16.9 14.4L18.3 21L12 17.6L5.7 21L7.1 14.4L2 9.55L9.05 8.7Z"/></svg>';
+
+const state = {view:'home', q:'', cat:'all'};
+
+/* ===== 本地存储 ===== */
+function readStore(key, fallback){
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return fallback;
+    const val = JSON.parse(raw);
+    return Array.isArray(val) ? val : fallback;
+  }catch(err){ return fallback; }
+}
+function writeStore(key, val){
+  try{ localStorage.setItem(key, JSON.stringify(val)); }catch(err){ /* 隐私模式下可能不可写 */ }
+}
+
+let saved = new Set(readStore(STORE.saved, []).filter(id => typeof id === 'string'));
+let drafts = readStore(STORE.drafts, []).filter(d => d && typeof d.name === 'string');
+
+/* ===== 小工具 ===== */
+const byId = id => document.getElementById(id);
+
+let toastTimer = null;
+function toast(msg){
+  const el = byId('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1900);
+}
+
+function makeEmpty(text, actionLabel, action){
+  const box = document.createElement('div');
+  box.className = 'empty';
+  const p = document.createElement('p');
+  p.style.margin = '0';
+  p.textContent = text;
+  box.append(p);
+  if(actionLabel){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = actionLabel;
+    btn.addEventListener('click', action);
+    box.append(btn);
+  }
+  return box;
+}
+
+/* ===== 一行链接 ===== */
+function makeRow(item){
+  const row = document.createElement('div');
+  row.className = 'row';
+
+  const link = document.createElement('a');
+  link.className = 'row-link';
+  link.href = item.url;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+
+  const name = document.createElement('span');
+  name.className = 'row-name';
+  name.textContent = item.name;
+
+  const desc = document.createElement('p');
+  desc.className = 'row-desc';
+  desc.textContent = item.desc;
+
+  link.append(name, desc);
+
+  const domain = document.createElement('span');
+  domain.className = 'row-domain';
+  domain.textContent = item.host;
+
+  const acts = document.createElement('div');
+  acts.className = 'row-acts';
+
+  const open = document.createElement('a');
+  open.className = 'open-btn';
+  open.href = item.url;
+  open.target = '_blank';
+  open.rel = 'noopener noreferrer';
+  open.setAttribute('aria-label', '在新窗口打开 ' + item.name);
+  open.innerHTML = ARROW_SVG;
+
+  const star = document.createElement('button');
+  star.type = 'button';
+  star.className = 'star' + (saved.has(item.id) ? ' on' : '');
+  star.dataset.id = item.id;
+  star.innerHTML = STAR_SVG;
+  star.setAttribute('aria-pressed', saved.has(item.id) ? 'true' : 'false');
+  star.setAttribute('aria-label', (saved.has(item.id) ? '取消收藏 ' : '收藏 ') + item.name);
+  star.addEventListener('click', () => toggleSave(item.id));
+
+  acts.append(open, star);
+  row.append(link, domain, acts);
+  return row;
+}
+
+function syncStars(){
+  document.querySelectorAll('.star').forEach(btn => {
+    const on = saved.has(btn.dataset.id);
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
+
+function toggleSave(id){
+  const item = DATA.find(d => d.id === id);
+  if(!item) return;
+  if(saved.has(id)){ saved.delete(id); toast('已取消收藏'); }
+  else{ saved.add(id); toast('已收藏 · ' + item.name); }
+  writeStore(STORE.saved, Array.from(saved));
+
+  if(state.view === 'saved'){ renderSaved(); }
+  else{ syncStars(); }
+}
+
+/* ===== 首页 ===== */
+function renderHome(){
+  const list = byId('home-list');
+  list.innerHTML = '';
+  DATA.filter(d => d.featured).forEach(d => list.append(makeRow(d)));
+
+  const cats = byId('home-cats');
+  cats.innerHTML = '';
+  CATS.forEach(c => {
+    const count = DATA.filter(d => d.cat === c.key).length;
+    const row = document.createElement('a');
+    row.className = 'cat-row';
+    row.href = '#/all?cat=' + c.key;
+
+    const name = document.createElement('span');
+    name.className = 'cat-name';
+    name.textContent = c.label;
+
+    const note = document.createElement('span');
+    note.className = 'cat-note';
+    note.textContent = c.note;
+
+    const num = document.createElement('span');
+    num.className = 'cat-num';
+    num.textContent = count + ' 条';
+
+    row.append(name, note, num);
+    cats.append(row);
+  });
+}
+
+/* ===== 全部链接 ===== */
+function buildChips(){
+  const box = byId('chips');
+  box.innerHTML = '';
+  const all = document.createElement('button');
+  all.type = 'button';
+  all.className = 'chip on';
+  all.dataset.cat = 'all';
+  all.textContent = '全部';
+  all.addEventListener('click', () => setCat('all'));
+  box.append(all);
+
+  CATS.forEach(c => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip';
+    chip.dataset.cat = c.key;
+    chip.textContent = c.label;
+    chip.addEventListener('click', () => setCat(c.key));
+    box.append(chip);
+  });
+}
+
+function setCat(key){
+  state.cat = key;
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.cat === key));
+  renderAll();
+}
+
+function matches(item, q){
+  if(!q) return true;
+  const hay = (item.name + ' ' + item.desc + ' ' + item.host + ' ' + CAT_LABEL[item.cat]).toLowerCase();
+  return hay.indexOf(q) !== -1;
+}
+
+function renderAll(){
+  const q = state.q.trim().toLowerCase();
+  const results = byId('all-results');
+  results.innerHTML = '';
+
+  const pool = DATA.filter(d => (state.cat === 'all' || d.cat === state.cat) && matches(d, q));
+
+  byId('q-clear').hidden = state.q.length === 0;
+
+  if(pool.length === 0){
+    results.append(makeEmpty('没有匹配的链接。换个更短的关键词，或者切回全部类别。', '清空搜索条件', () => {
+      state.q = '';
+      byId('q').value = '';
+      setCat('all');
+    }));
+    return;
+  }
+
+  if(state.cat === 'all' && q === ''){
+    CATS.forEach(c => {
+      const group = DATA.filter(d => d.cat === c.key);
+      if(!group.length) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'group';
+      const head = document.createElement('div');
+      head.className = 'group-head';
+      const h3 = document.createElement('h3');
+      h3.textContent = c.label;
+      const span = document.createElement('span');
+      span.textContent = group.length + ' 条';
+      head.append(h3, span);
+      wrap.append(head);
+      group.forEach(d => wrap.append(makeRow(d)));
+      results.append(wrap);
+    });
+  }else{
+    const wrap = document.createElement('div');
+    wrap.className = 'group';
+    const head = document.createElement('div');
+    head.className = 'group-head';
+    const h3 = document.createElement('h3');
+    h3.textContent = state.cat === 'all' ? '搜索结果' : CAT_LABEL[state.cat];
+    const span = document.createElement('span');
+    span.textContent = pool.length + ' 条';
+    head.append(h3, span);
+    wrap.append(head);
+    pool.forEach(d => wrap.append(makeRow(d)));
+    results.append(wrap);
+  }
+}
+
+/* ===== 收藏 ===== */
+function renderSaved(){
+  const box = byId('saved-list');
+  box.innerHTML = '';
+  const items = DATA.filter(d => saved.has(d.id));
+
+  if(items.length === 0){
+    box.append(makeEmpty('还没有收藏。在每条链接右侧点一下星号，它就会出现在这里。', '去看全部链接', () => {
+      location.hash = '#/all';
+    }));
+    return;
+  }
+  items.forEach(d => box.append(makeRow(d)));
+}
+
+/* ===== 投稿 ===== */
+function renderDrafts(){
+  const wrap = byId('drafts-wrap');
+  const box = byId('drafts');
+  box.innerHTML = '';
+  wrap.hidden = drafts.length === 0;
+
+  drafts.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'draft';
+
+    const text = document.createElement('p');
+    const title = document.createElement('strong');
+    title.textContent = d.name;
+    const meta = document.createElement('span');
+    meta.textContent = (CAT_LABEL[d.cat] || '未分类') + ' · ' + d.host + (d.note ? ' · ' + d.note : '');
+    text.append(title, meta);
+
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.textContent = '删除';
+    del.addEventListener('click', () => {
+      drafts = drafts.filter(x => x.did !== d.did);
+      writeStore(STORE.drafts, drafts);
+      renderDrafts();
+      toast('已从待收录清单删除');
+    });
+
+    row.append(text, del);
+    box.append(row);
+  });
+}
+
+function normalizeUrl(raw){
+  let url = raw.trim();
+  if(!url) return null;
+  if(!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)) url = 'https://' + url;
+  try{
+    const parsed = new URL(url);
+    if(parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+    if(!parsed.hostname || parsed.hostname.indexOf('.') === -1) return null;
+    return parsed;
+  }catch(err){ return null; }
+}
+
+function initForm(){
+  const select = byId('f-cat');
+  CATS.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.key;
+    opt.textContent = c.label;
+    select.append(opt);
+  });
+
+  const form = byId('add-form');
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const errorBox = byId('form-error');
+    const name = byId('f-name').value.trim();
+    const rawUrl = byId('f-url').value;
+    const cat = byId('f-cat').value || 'study';
+    const note = byId('f-note').value.trim();
+
+    errorBox.textContent = '';
+
+    if(!name){
+      errorBox.textContent = '请先填站点名。';
+      byId('f-name').focus();
+      return;
+    }
+    const parsed = normalizeUrl(rawUrl);
+    if(!parsed){
+      errorBox.textContent = '网址要写完整，例如 https://example.com。';
+      byId('f-url').focus();
+      return;
+    }
+
+    const item = {
+      did: 'd' + Date.now() + Math.random().toString(36).slice(2, 8),
+      name: name,
+      url: parsed.href,
+      host: parsed.hostname,
+      cat: cat,
+      note: note
+    };
+
+    drafts = [item].concat(drafts);
+    writeStore(STORE.drafts, drafts);
+    renderDrafts();
+
+    form.reset();
+    select.value = cat;
+    toast('已存到本机待收录清单');
+  });
+}
+
+/* ===== 路由 ===== */
+function parseHash(){
+  const raw = location.hash.replace(/^#\/?/, '');
+  const parts = raw.split('?');
+  const path = parts[0];
+  const params = new URLSearchParams(parts[1] || '');
+  return {
+    view: VIEWS.indexOf(path) !== -1 ? path : 'home',
+    cat: params.get('cat')
+  };
+}
+
+function showView(view){
+  VIEWS.forEach(v => {
+    const el = byId('view-' + v);
+    const isActive = v === view;
+    el.hidden = !isActive;
+    if(isActive){
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    }
+  });
+  document.querySelectorAll('.nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.nav === view);
+  });
+}
+
+function onRoute(){
+  const {view, cat} = parseHash();
+  state.view = view;
+  if(cat && CAT_LABEL[cat]){
+    state.cat = cat;
+    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.cat === cat));
+  }else if(view === 'all'){
+    state.cat = 'all';
+    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.cat === 'all'));
+  }
+
+  showView(view);
+  if(view === 'all') renderAll();
+  if(view === 'saved') renderSaved();
+  window.scrollTo(0, 0);
+}
+
+/* ===== 启动 ===== */
+function init(){
+  byId('total-count').textContent = DATA.length;
+  var fc = byId('foot-count'); if(fc) fc.textContent = DATA.length + ' 条链接 · ' + CATS.length + ' 类';
+  byId('all-sub').textContent = '共 ' + DATA.length + ' 条。用关键词或类别收窄范围。';
+
+  buildChips();
+  initForm();
+  renderHome();
+  renderDrafts();
+  renderAll();
+  renderSaved();
+
+  const q = byId('q');
+  q.addEventListener('input', () => {
+    state.q = q.value;
+    renderAll();
+  });
+  byId('q-clear').addEventListener('click', () => {
+    state.q = '';
+    q.value = '';
+    renderAll();
+    q.focus();
+  });
+
+  window.addEventListener('hashchange', onRoute);
+  onRoute();
+}
+
+init();
+</script>
+</body>
+</html>
