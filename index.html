@@ -42,13 +42,11 @@ button{font-family:inherit}
 }
 .avatar{
   width:96px;height:96px;border-radius:50%;
-  background:#fff;
+  object-fit:cover;
   border:4px solid #fff;
-  box-shadow:0 6px 20px rgba(0,0,0,.15);
+  box-shadow:0 6px 20px rgba(0,0,0,.2);
   margin:0 auto 16px;
-  display:grid;place-items:center;
-  font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
-  font-size:40px;font-weight:600;color:var(--seal);
+  display:block;
 }
 .site-name{
   margin:0;
@@ -264,7 +262,7 @@ main{padding:0 24px}
 /* ===== 窄屏 ===== */
 @media (max-width:640px){
   .hero{padding:40px 20px 48px}
-  .avatar{width:80px;height:80px;font-size:34px;margin-bottom:14px}
+  .avatar{width:80px;height:80px;margin-bottom:14px}
   .site-name{font-size:26px}
   .site-bio{font-size:13px}
   .topnav{gap:20px;padding:12px 12px;overflow-x:auto}
@@ -287,7 +285,7 @@ main{padding:0 24px}
 <body>
 
 <header class="hero">
-    <div class="avatar" aria-hidden="true">幼</div>
+    <img class="avatar" src="avatar.png" alt="幼安头像">
     <h1 class="site-name">幼安</h1>
     <p class="site-bio">芯片、显卡、整机，常看的站点都在这里。</p>
   </header>
