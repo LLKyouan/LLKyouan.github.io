@@ -674,19 +674,31 @@ main{padding:0 24px}
   .content{padding:36px 0 44px}
   .page-title{font-size:24px}
   .section{margin-top:44px}
-  .row{grid-template-columns:minmax(0,1fr) auto;padding:15px 0}
-  .row-head{flex-wrap:wrap;gap:4px 8px}
+  .row{grid-template-columns:minmax(0,1fr) auto;padding:16px 0}
+  .row-head{flex-wrap:wrap;gap:3px 8px}
   .row-name{font-size:17px}
+  .row-domain{font-size:12px}
   .badge{width:22px;height:22px}
-  .row-acts{gap:2px}
-  .row-acts .badge{width:30px;height:30px;margin-right:2px}
-  .row-acts .badge.wm{display:none}
+  /* 行是整块链接，窄屏把箭头收掉，把宽度让给文字，星标放大到好点 */
+  .row-acts{gap:0}
+  .open-btn{display:none}
+  .star{width:44px;height:44px}
+  .row-acts .badge{width:30px;height:30px;margin-right:4px}
+  /* 大号字标在窄屏会压成一条线：换成方形小标，保留品牌识别 */
+  .row-acts .badge.wm{width:30px;height:30px;background-position:center;background-size:contain}
+  .wm-amd{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAp0lEQVR42u3XTQ6DIBAG0KHpzxl6C47LPdtNu9GtC9vqQrTwXsLGQJj5ghoiAAAAAACAXqQKe1wj4nXUGk8VAnhHxK3nEzA19HgC9gz8sAV92vcy871I0Zi84DWZjuaaH3oNIC9sqskA8oqmmgsgr2yqagBpp39/WjF/0xrPO52K+8yzR0Q8W7xvDAtG+bKm+QDKj3VNB1A2uDv8TQAlAAAAAAAAKhoBOOZNHS8fXNIAAAAASUVORK5CYII=")}
+  .wm-intel{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAEvUlEQVR42u2aX4hUVRzHP98zf1fZcWdX3VXRSg1MKurFIChIwgfNqCTqIYpQiDI26KFeEiKC/hARPdSDEUL7ktBLWdBDGtIfKIMgIW0hZf2Xu67T6q4zOzP3/nq49+6My7qr7rqteL5Pd+6ce875fX6/c36/M3fAy8vLy8vL60aVpmyxd6hEOpu/bi28v6Vlsq/TU3aQzubJXKcAatXKVE3cjb4EPAAPwAPwADwAD8AD8AA8AA/gBlV62j3YFZ0tZ0YzOObVAzADCXJxENUNgjCakS7XCLv89s3jIggtfk5RP9IsAjADJxipwb5+GA1gTRusLEBgk7vFABmL0pCXGArhXHAFIELYUITtXY6BmvFqHwzWZ3sPsJh+pQ57T8DXfXDkPKRd7KHJXZ8Ddq0Sv9wpujsjo65k7NU5eLhdPNYuWhyXMea12gOcoJiDtCCfmngiSagnIWqG5OjKiK6sWJCy6DmbIAKS/prDWyKILysWs5NmGYAUhXprFrbdFk00l4JqCKHiJdLs2XidusZkg9i2Shhb4Zo2N7P4Wg2KbmJD9b9kAUVGFjLiqVuztKXFnrNGf814eomohrB7EO6ebzxUdGQc/DYMnw8aZ2sGKWHxzO9tFS8vF1+VoLcSEbhrHmwuilV5MRTAviH45l+jGhrMmTRoRtGJ15fBoiwMVOD3MrxzM4wGYv0C2NyuMa9t7YTHO+CJv6AUGBb7bn3Rsb4IxyohvSOwfal4Y4VozzR83L1UfHHGeP7vkIGqzWi+vXoAEoYYNQEiwAgQgYmcExuLxqf9xsGRkAfbxMZ28UCb2LYY3j7Z8OSBYeOn8/BH2djUAe/dIlKCz/qNn88ZK3LimU6xZSEM1sVzvVEGnDuF0Lj1GC1d4/0TxitHDTB29sN3a8W6grivAB+eajzzbcl47Yjh0vDRSpF34s2+kB194Vi+3z9k7F7jeHKhePeEUZurAJK8WgthT8lAUb0wXBcHRox1BdGajpJGYwIGzliRFWvnRV9sKIp7Wh0pKS6VjKyDrIPb52lsA52TAATUzKKl0WRoYJpw605sSSsKfYDODBTTwikpMsXhcgSuatPKetcewFiWkF1ksJoyWmiMhXEhLQjheNXoG4WFGdHTb7x13AickBlLsqJFcKxqlEN4drHmBgAbd22T5ObmmmY0hFPV6POWDlEPxQenQnb+Ax+vNl5cKkLBD+eMzrTY2iWKKXjpKHxfCsdo2rg5zHoadIicGh2lYgPzSY2dWG0iGxfdeQc1oGfA2FSEzqzoXgb7h8Qnp4075sMLXWLHcjWhFKWasSR78aRb1DTOrB6GYlcOh5EhizPG4QqcqcOu00bdoL+WLIXIjh/PGwVn/FkG5+DLkvHoIXik3Vieg5N1qGN0H4G9Q8aWDnFTTlRC+HU4pOeMcfBCVH4fKkPP6ZCzdbgQTK8enPrJ/eXyJV+OGo2knOxYyTE18UiSG5PyVnHb8fekxvE47jPrRN0gTA5fyXOXGocJXo5O++3wVPhS40ZOaeJ240O0+Z5x8aEnFRlapcnw8S5LaQ5ngZmIQ83OT0z+R1EPwAPwADwAD8AD8AA8AA/AA/AAPAD8HyS46n9dz00ZXl5eXl5eXl6X0n/ld7kP+3RbggAAAABJRU5ErkJggg==")}
+  .wm-qualcomm{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADj0lEQVR42mNgGAWjYBSMglEwCkbBKBgFo2AUjIJRMApGwSigMWBkYmPhFjbUU7KaucIw+M5/w+A7/5WsZq7gFjbUY2RiY6G7e+jka0YZ/dp2UeXYcmKUv767uPPJxeZKhv///g/5ABBViUuU0a+bR47ep5c7M1/dmj1jiAYAI4Nh8O3/+GL5w5NtqxgYGBgEZLzC8KWO82tVGRkY/g+lAMDu+QeniwPeP9q0EbdnGBkE5fz8FUx7N9ArEGgSAIbBd1Bc+ufnu5eXt1pIEp2nGZkYdb1PPGdhFxJHDQQVqruXidoGiqmlZiDzf359cuvyFjMJkgq0///+X95iJvHz65Nb+MwefCmAkYnRMOjWP+olXcysdH6dGhM1aweqpgA5o9aJyPxrO5ykKcu3/xmu7XCQxGfHoAoAYYXQXNTk/+gZpWb+/PrkBT47Bk0AMDGzsyLzH50pD6WW2ehmods1KAKAS1BPF5n/7vGWjdQy+93jzRvw2TUoAkBCI6cBtSD/9ZtaZv//9/sPPrsGRQDwilv7ohdg1AP/Cdg1iNoBQw1QLQDeP94yj3ZNDFSz3j5YPXnQBcDruwsnopXUbFSsYdhQ7VoyddAFwLf3V6+h1NeKYdHE6FMwmzAXNjCC3ofAZdaPT7fuDroA+P/vF0pJTewYwJMLDQXIfHYeRVl0NehmodcKg6YQfHVrbiMyn5NfU5WQnj+/PnxG5mu5736EYoaAtjoy//nVvoJB2xR+erkDJQA0XDbfYmBgJFgaonuKkZGZCcbScN54A1nuxY3pkwZxd/j/f/Rmq2Hw7X+EdL28OQPFUxJaeWXY9D44mevFwPD//6AfENHyOHCTnVtGDVnswnpNlv//fv8ldhAFS6fo1rUdDuqDfkAE0g3GdKhB4PU/Mgb1HQyMTFgD/ea+IG1SzRz0o8LYUgJyjL65t7SfiYmVXUghLAuXuu+fbp69sdvbhGGoDovzS7k4K1nO2ENuN/jtw7VrhkRTGBf4+GzP3vNrVRkfn6uNIVXvv7/fvjIMi5khtCqOlVNclFfU0pZX3Nbzz6/3r7++u3D8y6vjR/78ev/BIPD6H1qPBA9oABAC3MKGemoOqy/C+Bc36HL8+/v955DNAqSCr28vXELmq9gu3D6kywByBj++vj23H5EijBxHWAAwMNw+GOWCPt/AMApGwSgYBaNgFIyCUTAKRsEoGAWjYBSMglFAJQAACwdMvclIMnQAAAAASUVORK5CYII=")}
+  /* 输入框 16px：iOS 上小于 16 会触发聚焦放大 */
+  .field input,.field select,.field textarea{font-size:16px}
+  .chip{min-height:36px;padding:8px 14px}
+  .topnav a{padding:8px 2px}
   .cat-row{grid-template-columns:1fr auto;row-gap:5px;padding:14px 0}
   .cat-row .cat-note{grid-column:1 / -1}
   .cat-num{grid-column:2;grid-row:1}
   .foot-inner{padding:20px 64px 56px 18px;flex-direction:column;gap:6px}
   .foot-inner span:last-child{text-align:left}
-  .totop{right:14px;bottom:16px;width:42px;height:42px}
+  .totop{right:14px;bottom:16px;width:46px;height:46px}
   /* 窄屏玻璃板收一点内边距，别把文字挤窄 */
   .dock{margin-top:26px;padding:0 16px 12px}
   .dock .search-row{margin-top:14px}
@@ -695,6 +707,19 @@ main{padding:0 24px}
   .form{padding:6px 16px 18px}
   .drafts-wrap{padding-left:14px;padding-right:14px}
   .toast{bottom:74px;font-size:12px;padding:9px 16px}
+}
+
+/* 小屏手机：再收一档，名字与说明都别被挤成窄条 */
+@media (max-width:380px){
+  .hero{padding:34px 16px 42px}
+  .avatar{width:72px;height:72px}
+  .site-name{font-size:23px}
+  .site-bio{font-size:12.5px}
+  main{padding:0 14px}
+  .row-name{font-size:16px}
+  .list,.group,#home-cats,#saved-list{padding-left:12px;padding-right:12px}
+  .chips{gap:8px 8px}
+  .section-head .meta{font-size:12px}
 }
 </style>
 </head>
