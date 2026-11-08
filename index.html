@@ -1234,6 +1234,47 @@ main{padding:0 24px}
 .file-clear[hidden]{display:none}
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .draft em{display:block;margin-top:3px;font-style:normal;color:var(--ink-mute);font-size:12.5px}
+
+/* ===== 小游戏：抓芯片 ===== */
+.game-sec{margin-top:52px}
+.game{
+  margin-top:14px;padding:16px;
+  border-radius:var(--r-lg);
+  background:rgba(255,255,255,.7);
+  border:.5px solid rgba(255,255,255,.72);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 18px 36px -28px rgba(42,33,48,.6);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.game-bar{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--ink-soft)}
+.game-score b,.game-best b{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:500}
+.game-start{
+  margin-left:auto;appearance:none;-webkit-appearance:none;cursor:pointer;
+  font-family:inherit;font-size:13px;color:#fff;
+  padding:8px 18px;border:0;border-radius:var(--r-pill);
+  background:linear-gradient(180deg,#A96EC4,#8E52AA);
+  box-shadow:0 10px 22px -16px rgba(93,52,124,.9),inset 0 1px 0 rgba(255,255,255,.28);
+  transition:transform var(--t-fast) var(--ease-out),filter var(--t-fast) ease;
+}
+.game-start:active{transform:scale(.96);filter:brightness(.97)}
+.game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.cell{
+  aspect-ratio:1;appearance:none;-webkit-appearance:none;cursor:pointer;padding:0;
+  border-radius:14px;
+  background:rgba(255,255,255,.58);
+  border:.5px solid rgba(255,255,255,.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72);
+  transition:transform .12s var(--ease-out),background-color .16s ease,box-shadow .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.cell:active{transform:scale(.96)}
+.cell.lit{
+  background:linear-gradient(180deg,#B172CD,#8F53AB);
+  box-shadow:0 12px 24px -16px rgba(93,52,124,.95),inset 0 1px 0 rgba(255,255,255,.34);
+  transform:scale(1.02);
+}
+.cell.miss{background:rgba(214,116,146,.36)}
+.game-tip{margin:12px 0 0;font-size:12.5px;color:var(--ink-mute)}
+@media (prefers-reduced-motion:reduce){.cell,.game-start{transition:none}}
 </style>
 </head>
 <body>
@@ -1363,6 +1404,22 @@ main{padding:0 24px}
             <h3>待收录</h3>
             <div id="drafts"></div>
           </div>
+
+          <section class="section game-sec">
+            <div class="section-head">
+              <h2>抓芯片</h2>
+              <span class="meta">20 秒一局</span>
+            </div>
+            <div class="game" id="game">
+              <div class="game-bar">
+                <span class="game-score">得分 <b id="game-score">0</b></span>
+                <span class="game-best">最高 <b id="game-best">0</b></span>
+                <button class="game-start" id="game-start" type="button">开始</button>
+              </div>
+              <div class="game-grid" id="game-grid"></div>
+              <p class="game-tip" id="game-tip">亮起来的那格点一下，点错扣 2 秒。</p>
+            </div>
+          </section>
         </section>
       </section>
 
@@ -2048,6 +2105,94 @@ function initForm(){
   });
 }
 
+/* ===== 小游戏 ===== */
+function initGame(){
+  const grid = byId('game-grid');
+  const scoreEl = byId('game-score');
+  const bestEl = byId('game-best');
+  const startBtn = byId('game-start');
+  const tip = byId('game-tip');
+  if(!grid || !startBtn) return;
+  const BEST_KEY = 'liuzhi.game.v1';
+
+  const cells = [];
+  for(let i = 0; i < 9; i++){
+    const c = document.createElement('button');
+    c.type = 'button';
+    c.className = 'cell';
+    c.setAttribute('aria-label', '第 ' + (i + 1) + ' 格');
+    c.dataset.i = String(i);
+    grid.append(c);
+    cells.push(c);
+  }
+
+  let best = 0;
+  try{ best = Number(localStorage.getItem(BEST_KEY)) || 0; }catch(err){}
+  bestEl.textContent = String(best);
+
+  let running = false, score = 0, lit = -1, left = 20000, last = 0, raf = 0;
+
+  function light(){
+    if(lit >= 0) cells[lit].classList.remove('lit');
+    let n = Math.floor(Math.random() * 9);
+    if(n === lit) n = (n + 4) % 9;
+    lit = n;
+    cells[lit].classList.add('lit');
+  }
+
+  function tick(now){
+    if(!running) return;
+    left -= now - last;
+    last = now;
+    if(left <= 0){ finish(); return; }
+    tip.textContent = '还剩 ' + (left / 1000).toFixed(1) + ' 秒';
+    raf = requestAnimationFrame(tick);
+  }
+
+  function finish(){
+    running = false;
+    cancelAnimationFrame(raf);
+    if(lit >= 0){ cells[lit].classList.remove('lit'); lit = -1; }
+    if(score > best){
+      best = score;
+      bestEl.textContent = String(best);
+      try{ localStorage.setItem(BEST_KEY, String(best)); }catch(err){}
+      tip.textContent = '这局 ' + score + ' 分，破了纪录。';
+    }else{
+      tip.textContent = '这局 ' + score + ' 分。';
+    }
+    startBtn.textContent = '再来一局';
+  }
+
+  grid.addEventListener('click', event => {
+    const cell = event.target.closest('.cell');
+    if(!cell || !running) return;
+    if(Number(cell.dataset.i) === lit){
+      score++;
+      scoreEl.textContent = String(score);
+      light();
+    }else{
+      left -= 2000;
+      cell.classList.add('miss');
+      setTimeout(() => cell.classList.remove('miss'), 220);
+      if(left <= 0) finish();
+    }
+  });
+
+  startBtn.addEventListener('click', () => {
+    score = 0;
+    left = 20000;
+    scoreEl.textContent = '0';
+    startBtn.textContent = '重开';
+    tip.textContent = '亮起来的那格点一下，点错扣 2 秒。';
+    running = true;
+    light();
+    last = performance.now();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(tick);
+  });
+}
+
 /* ===== 路由 ===== */
 function parseHash(){
   const raw = location.hash.replace(/^#\/?/, '');
@@ -2490,6 +2635,7 @@ function init(){
   initArmOpen();
   initNavPill();
   initGlassSpot();
+  initGame();
   window.addEventListener('hashchange', onRoute);
   onRoute();
 }
