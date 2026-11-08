@@ -1235,46 +1235,136 @@ main{padding:0 24px}
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .draft em{display:block;margin-top:3px;font-style:normal;color:var(--ink-mute);font-size:12.5px}
 
-/* ===== 小游戏：抓芯片 ===== */
-.game-sec{margin-top:52px}
-.game{
-  margin-top:14px;padding:16px;
+/* ===== 本轮：横幅四角、导航圆角通透、首页贪吃蛇 ===== */
+.hero{
+  border-radius:var(--r-xl);
+  margin:0 10px;
+  overflow:hidden;
+}
+@media (max-width:560px){
+  .hero{margin:0 8px;border-radius:var(--r-lg)}
+}
+
+/* 导航：一枚悬在横幅下方的通透胶囊 */
+.topnav{
+  position:sticky;
+  top:10px;
+  z-index:10;
+  width:max-content;
+  max-width:calc(100% - 24px);
+  margin:10px auto 0;
+  padding:6px 8px;
+  gap:2px;
+  border:0.5px solid rgba(255,255,255,.78);
+  border-radius:var(--r-pill);
+  background:rgba(252,250,255,.56);
+  -webkit-backdrop-filter:blur(26px) saturate(190%);
+  backdrop-filter:blur(26px) saturate(190%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.82),
+    inset 0 -1px 0 rgba(42,33,48,.05),
+    0 16px 34px -22px rgba(42,33,48,.55);
+  transition:background-color .4s var(--ease-ios),box-shadow .4s var(--ease-ios),transform .4s var(--ease-ios);
+}
+.topnav.lift{
+  background:rgba(252,250,255,.74);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 20px 40px -24px rgba(42,33,48,.6);
+}
+.topnav a{padding:7px 14px;font-size:13px}
+@media (max-width:560px){
+  .topnav{top:8px;padding:5px 6px;max-width:calc(100% - 18px)}
+  .topnav a{padding:7px 10px;font-size:12.5px}
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .topnav{background:rgba(252,250,255,.94)}
+}
+
+/* 首页贪吃蛇 */
+.snake-sec{margin-top:52px}
+.snake{
+  margin-top:14px;
+  padding:14px;
   border-radius:var(--r-lg);
-  background:rgba(255,255,255,.7);
-  border:.5px solid rgba(255,255,255,.72);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 18px 36px -28px rgba(42,33,48,.6);
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.6);
+  border:0.5px solid rgba(255,255,255,.74);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 20px 40px -30px rgba(42,33,48,.6);
+  -webkit-backdrop-filter:blur(16px) saturate(180%);
+  backdrop-filter:blur(16px) saturate(180%);
 }
-.game-bar{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--ink-soft)}
-.game-score b,.game-best b{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:500}
-.game-start{
-  margin-left:auto;appearance:none;-webkit-appearance:none;cursor:pointer;
-  font-family:inherit;font-size:13px;color:#fff;
-  padding:8px 18px;border:0;border-radius:var(--r-pill);
+.snake-bar{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--ink-soft)}
+.snake-bar b{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:500}
+.snake-start{
+  margin-left:auto;
+  appearance:none;-webkit-appearance:none;
+  font-family:inherit;font-size:12.5px;color:#fff;
+  padding:7px 16px;border:0;border-radius:var(--r-pill);
   background:linear-gradient(180deg,#A96EC4,#8E52AA);
-  box-shadow:0 10px 22px -16px rgba(93,52,124,.9),inset 0 1px 0 rgba(255,255,255,.28);
-  transition:transform var(--t-fast) var(--ease-out),filter var(--t-fast) ease;
+  box-shadow:0 10px 22px -16px rgba(93,52,124,.9),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:transform .14s var(--ease-out),filter .14s ease;
 }
-.game-start:active{transform:scale(.96);filter:brightness(.97)}
-.game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-.cell{
-  aspect-ratio:1;appearance:none;-webkit-appearance:none;cursor:pointer;padding:0;
-  border-radius:14px;
-  background:rgba(255,255,255,.58);
-  border:.5px solid rgba(255,255,255,.8);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.72);
-  transition:transform .12s var(--ease-out),background-color .16s ease,box-shadow .2s ease;
-  -webkit-tap-highlight-color:transparent;
+.snake-start:active{transform:scale(.95);filter:brightness(.97)}
+#snake-canvas{
+  display:block;width:100%;
+  margin-top:12px;
+  border-radius:18px;
+  background:rgba(255,255,255,.55);
+  touch-action:none;
+  box-shadow:inset 0 0 0 .5px rgba(42,33,48,.06);
 }
-.cell:active{transform:scale(.96)}
-.cell.lit{
-  background:linear-gradient(180deg,#B172CD,#8F53AB);
-  box-shadow:0 12px 24px -16px rgba(93,52,124,.95),inset 0 1px 0 rgba(255,255,255,.34);
-  transform:scale(1.02);
-}
-.cell.miss{background:rgba(214,116,146,.36)}
-.game-tip{margin:12px 0 0;font-size:12.5px;color:var(--ink-mute)}
-@media (prefers-reduced-motion:reduce){.cell,.game-start{transition:none}}
+.snake-tip{margin:10px 0 0;font-size:12.5px;color:var(--ink-mute)}
+@media (prefers-reduced-motion:reduce){.snake-start{transition:none}}
+
+/* ===== 小游戏：切换、街机两个 ===== */
+.game-switch{display:flex;gap:5px;width:max-content;max-width:100%;margin:18px 0 0;padding:5px 6px;
+  border:.5px solid rgba(255,255,255,.78);border-radius:var(--r-pill);
+  background:rgba(252,250,255,.58);
+  -webkit-backdrop-filter:blur(22px) saturate(185%);backdrop-filter:blur(22px) saturate(185%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 14px 30px -24px rgba(42,33,48,.55)}
+.game-switch button{appearance:none;-webkit-appearance:none;border:0;background:transparent;
+  font-family:inherit;font-size:12.5px;color:var(--ink-soft);padding:7px 14px;border-radius:var(--r-pill);
+  transition:background .26s var(--ease-ios),color .26s ease,transform .16s var(--ease-out)}
+.game-switch button.on{background:rgba(155,89,182,.16);color:var(--ink);font-weight:500}
+.game-switch button:active{transform:scale(.95)}
+.game-pane .stage{margin-top:12px;border-radius:16px;overflow:hidden;background:rgba(255,255,255,.5);
+  box-shadow:inset 0 0 0 .5px rgba(42,33,48,.06)}
+.game-pane canvas{display:block;width:100%;height:auto;touch-action:none}
+.pad{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.pad button{flex:1 1 0;min-width:0;min-height:44px;font-family:inherit;font-size:12.5px;color:var(--ink);
+  border:.5px solid rgba(255,255,255,.82);border-radius:16px;background:rgba(255,255,255,.66);
+  -webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);
+  box-shadow:0 12px 24px -20px rgba(42,33,48,.7),inset 0 1px 0 rgba(255,255,255,.72);
+  transition:transform .14s var(--ease-out),background .2s ease}
+.pad button:active{transform:translateY(1px) scale(.97);background:rgba(155,89,182,.18)}
+.pad button.wide{flex:1.5 1 0}
+.game-hud{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:12.5px;color:var(--ink-soft)}
+.game-hud span{flex:none}
+.hp{position:relative;flex:1 1 0;height:8px;border-radius:99px;background:rgba(42,33,48,.12);overflow:hidden}
+.hp i{position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:99px;
+  background:linear-gradient(90deg,#B681CE,#9B59B6);transition:width .18s ease}
+.hp.enemy i{background:linear-gradient(90deg,#EFA9BD,#D67492)}
+
+/* ===== 像素街机：覆盖 ===== */
+.game-switch{flex-wrap:wrap;gap:4px;width:max-content;max-width:100%;padding:5px;border-radius:14px}
+.game-switch button{font-size:12px;padding:7px 11px;border-radius:9px}
+@media (max-width:560px){.game-switch{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.game-switch button{width:100%;padding:8px 4px}}
+.stage{position:relative;background:#151122;border-radius:12px;padding:6px;
+  box-shadow:inset 0 0 0 1px #0E0A18,0 12px 24px -22px rgba(42,33,48,.85)}
+.stage canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:-moz-crisp-edges}
+.stage::after{content:'';position:absolute;left:6px;right:6px;top:6px;bottom:6px;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.055) 0 1px,rgba(0,0,0,0) 1px 3px)}
+.snake-start{border-radius:6px;background:#9B59B6;box-shadow:0 3px 0 #63387A}
+.snake-start:active{transform:translateY(2px);box-shadow:0 1px 0 #63387A}
+.pad button{border-radius:8px;border:1.5px solid #2E2748;background:#241D38;color:#F4EEE1;
+  font-size:12px;box-shadow:0 3px 0 #141021}
+.pad button:active{background:#3A2F58;transform:translateY(2px);box-shadow:0 1px 0 #141021}
+.hp{height:10px;border-radius:0;background:#2A2440;border:2px solid #0F0B18;overflow:hidden}
+.hp i{width:100%;border-radius:0}
+.hp.enemy i{background:linear-gradient(180deg,#E88AA2,#B8546F)}
+.game-hud{font-size:12.3px;color:var(--ink-soft)}
+.snake-tip{color:var(--ink-mute)}
+.snake-bar b{color:var(--ink);font-weight:600}
 </style>
 </head>
 <body>
@@ -1299,6 +1389,7 @@ main{padding:0 24px}
   <a href="#/" data-nav="home">首页</a>
   <a href="#/all" data-nav="all">全部链接</a>
   <a href="#/saved" data-nav="saved">收藏</a>
+  <a href="#/game" data-nav="game">游戏</a>
   <a href="#/about" data-nav="about">关于</a>
 </nav>
 
@@ -1324,6 +1415,7 @@ main{padding:0 24px}
           </div>
           <div id="home-cats"></div>
         </section>
+
       </section>
 
       <!-- ===== 视图：全部链接 ===== -->
@@ -1349,13 +1441,136 @@ main{padding:0 24px}
         <div id="saved-list" style="margin-top:44px"></div>
       </section>
 
+      <!-- ===== 视图：小游戏 ===== -->
+      <section class="view" id="view-game" hidden>
+        <h2 class="page-title">小游戏</h2>
+        <p class="page-sub">六个红白机时代的老玩法，像素画面，等清单更新的间隙解个闷。</p>
+
+        <div class="game-switch" role="tablist" aria-label="选一个小游戏">
+          <button type="button" class="on" data-game="snake" role="tab" aria-selected="true">贪吃蛇</button>
+          <button type="button" data-game="kof" role="tab" aria-selected="false">拳皇</button>
+          <button type="button" data-game="contra" role="tab" aria-selected="false">魂斗罗</button>
+          <button type="button" data-game="tetris" role="tab" aria-selected="false">俄罗斯方块</button>
+          <button type="button" data-game="breakout" role="tab" aria-selected="false">打砖块</button>
+          <button type="button" data-game="invaders" role="tab" aria-selected="false">太空侵略者</button>
+        </div>
+
+        <div class="snake game-pane" id="pane-snake">
+          <div class="snake-bar">
+            <span>得分 <b id="snake-score">0</b></span>
+            <span>最高 <b id="snake-best">0</b></span>
+            <button class="snake-start" id="snake-start" type="button">开始</button>
+          </div>
+
+          <div class="stage"><canvas id="snake-canvas" width="384" height="384"></canvas></div>
+          <div class="pad">
+            <button type="button" data-s="left" aria-label="左">←</button>
+            <button type="button" data-s="up" aria-label="上">↑</button>
+            <button type="button" data-s="right" aria-label="右">→</button>
+            <button type="button" data-s="down" aria-label="下">↓</button>
+          </div>
+          <p class="snake-tip" id="snake-tip">方向键或滑动控制，吃掉黄点长一截。</p>
+        </div>
+
+        <div class="snake game-pane" id="pane-kof" hidden>
+          <div class="snake-bar">
+            <span>胜场 <b id="kof-score">0</b></span>
+            <span>最高 <b id="kof-best">0</b></span>
+            <button class="snake-start" id="kof-start" type="button">开始</button>
+          </div>
+
+          <div class="game-hud">
+            <span>你</span>
+            <div class="hp" id="kof-hp-you"><i></i></div>
+            <div class="hp enemy" id="kof-hp-foe"><i></i></div>
+            <span>对手</span>
+          </div>
+          <div class="stage"><canvas id="kof-canvas" width="480" height="270"></canvas></div>
+          <div class="pad">
+            <button type="button" data-k="left" aria-label="左">←</button>
+            <button type="button" data-k="right" aria-label="右">→</button>
+            <button type="button" data-k="jump">跳</button>
+            <button type="button" data-k="punch">拳</button>
+            <button type="button" data-k="kick">腿</button>
+            <button type="button" data-k="block">防</button>
+          </div>
+          <p class="snake-tip" id="kof-tip">← → 上步，跳 / 拳 / 腿 / 防；把对手血量打到 0。</p>
+        </div>
+
+        <div class="snake game-pane" id="pane-contra" hidden>
+          <div class="snake-bar">
+            <span>得分 <b id="ct-score">0</b></span>
+            <span>命 <b id="ct-life">3</b></span>
+            <button class="snake-start" id="ct-start" type="button">开始</button>
+          </div>
+
+          <div class="stage"><canvas id="ct-canvas" width="480" height="270"></canvas></div>
+          <div class="pad">
+            <button type="button" data-c="left" aria-label="左">←</button>
+            <button type="button" data-c="right" aria-label="右">→</button>
+            <button type="button" data-c="jump">跳</button>
+            <button type="button" data-c="fire" class="wide">射击</button>
+          </div>
+          <p class="snake-tip" id="ct-tip">← → 走位，跳可以躲，射击键按住连发。</p>
+        </div>
+
+        <div class="snake game-pane" id="pane-tetris" hidden>
+          <div class="snake-bar">
+            <span>得分 <b id="tet-score">0</b></span>
+            <span>最高 <b id="tet-best">0</b></span>
+            <button class="snake-start" id="tet-start" type="button">开始</button>
+          </div>
+
+          <div class="stage"><canvas id="tet-canvas" width="300" height="270"></canvas></div>
+          <div class="pad">
+            <button type="button" data-t="left" aria-label="左">←</button>
+            <button type="button" data-t="right" aria-label="右">→</button>
+            <button type="button" data-t="down" aria-label="下">↓</button>
+            <button type="button" data-t="rot">转</button>
+            <button type="button" data-t="drop" class="wide">落</button>
+          </div>
+          <p class="snake-tip" id="tet-tip">← → 移动，↓ 加速，转 旋转，落 直落。</p>
+        </div>
+
+        <div class="snake game-pane" id="pane-breakout" hidden>
+          <div class="snake-bar">
+            <span>得分 <b id="brk-score">0</b></span>
+            <span>命 <b id="brk-life">3</b></span>
+            <button class="snake-start" id="brk-start" type="button">开始</button>
+          </div>
+
+          <div class="stage"><canvas id="brk-canvas" width="480" height="270"></canvas></div>
+          <div class="pad">
+            <button type="button" data-b="left" aria-label="左">←</button>
+            <button type="button" data-b="right" aria-label="右">→</button>
+            <button type="button" data-b="serve" class="wide">发球</button>
+          </div>
+          <p class="snake-tip" id="brk-tip">← → 挡板移动，发球把球打出去。</p>
+        </div>
+
+        <div class="snake game-pane" id="pane-invaders" hidden>
+          <div class="snake-bar">
+            <span>得分 <b id="inv-score">0</b></span>
+            <span>命 <b id="inv-life">3</b></span>
+            <button class="snake-start" id="inv-start" type="button">开始</button>
+          </div>
+
+          <div class="stage"><canvas id="inv-canvas" width="480" height="270"></canvas></div>
+          <div class="pad">
+            <button type="button" data-i="left" aria-label="左">←</button>
+            <button type="button" data-i="right" aria-label="右">→</button>
+            <button type="button" data-i="fire" class="wide">射击</button>
+          </div>
+          <p class="snake-tip" id="inv-tip">← → 移动，射击打外星人，别让它们落地。</p>
+        </div>
+      </section>
+
       <!-- ===== 视图：关于 ===== -->
       <section class="view" id="view-about" hidden>
         <h2 class="page-title">关于这个站</h2>
         <div class="prose">
           <p>幼安是一份硬件相关的网址清单。厂商官网、评测媒体、参数库、攒机工具和社区，各留几个，每条只写一句它在什么时候有用。</p>
           <p>清单靠手动更新，条目不追多。打不开的会换掉，过时的会删掉，所以留下来的通常还能用。</p>
-          <p>它没有账号，也不联网保存。收藏和投稿都只写在这台设备的浏览器里，清缓存就没了。</p>
         </div>
 
         <section class="section form-block">
@@ -1404,22 +1619,6 @@ main{padding:0 24px}
             <h3>待收录</h3>
             <div id="drafts"></div>
           </div>
-
-          <section class="section game-sec">
-            <div class="section-head">
-              <h2>抓芯片</h2>
-              <span class="meta">20 秒一局</span>
-            </div>
-            <div class="game" id="game">
-              <div class="game-bar">
-                <span class="game-score">得分 <b id="game-score">0</b></span>
-                <span class="game-best">最高 <b id="game-best">0</b></span>
-                <button class="game-start" id="game-start" type="button">开始</button>
-              </div>
-              <div class="game-grid" id="game-grid"></div>
-              <p class="game-tip" id="game-tip">亮起来的那格点一下，点错扣 2 秒。</p>
-            </div>
-          </section>
         </section>
       </section>
 
@@ -1535,7 +1734,7 @@ const DATA = [
 const STORE = {saved:'liuzhi.saved.v1', drafts:'liuzhi.drafts.v1'};
 
 /* ===== 常量 ===== */
-const VIEWS = ['home','all','saved','about'];
+const VIEWS = ['home','all','saved','game','about'];
 const CAT_LABEL = {};
 CATS.forEach(c => { CAT_LABEL[c.key] = c.label; });
 const ARROW_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8.5 7H17V15.5"/></svg>';
@@ -2105,54 +2304,97 @@ function initForm(){
   });
 }
 
-/* ===== 小游戏 ===== */
-function initGame(){
-  const grid = byId('game-grid');
-  const scoreEl = byId('game-score');
-  const bestEl = byId('game-best');
-  const startBtn = byId('game-start');
-  const tip = byId('game-tip');
-  if(!grid || !startBtn) return;
-  const BEST_KEY = 'liuzhi.game.v1';
-
-  const cells = [];
-  for(let i = 0; i < 9; i++){
-    const c = document.createElement('button');
-    c.type = 'button';
-    c.className = 'cell';
-    c.setAttribute('aria-label', '第 ' + (i + 1) + ' 格');
-    c.dataset.i = String(i);
-    grid.append(c);
-    cells.push(c);
-  }
+/* ===== 经典小游戏：贪吃蛇 ===== */
+function initSnake(){
+  const cv = byId('snake-canvas');
+  const scoreEl = byId('snake-score');
+  const bestEl = byId('snake-best');
+  const startBtn = byId('snake-start');
+  const tip = byId('snake-tip');
+  if(!cv || !startBtn) return;
+  const ctx = cv.getContext('2d');
+  if(!ctx) return;
+  const N = 15;
+  const STEP = 120;
+  const BEST_KEY = 'liuzhi.snake.v1';
 
   let best = 0;
   try{ best = Number(localStorage.getItem(BEST_KEY)) || 0; }catch(err){}
   bestEl.textContent = String(best);
 
-  let running = false, score = 0, lit = -1, left = 20000, last = 0, raf = 0;
+  let cellPx = 24;
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  let snake = [], dir = {x:1, y:0}, want = {x:1, y:0}, food = {x:0, y:0};
+  let score = 0, running = false, acc = 0, last = 0, raf = 0;
 
-  function light(){
-    if(lit >= 0) cells[lit].classList.remove('lit');
-    let n = Math.floor(Math.random() * 9);
-    if(n === lit) n = (n + 4) % 9;
-    lit = n;
-    cells[lit].classList.add('lit');
+  function resize(){
+    const w = cv.clientWidth;
+    if(!w) return;
+    const size = Math.floor(w / N) * N;
+    cv.width = Math.round(size * dpr);
+    cv.height = Math.round(size * dpr);
+    cv.style.height = size + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cellPx = size / N;
+    draw();
   }
 
-  function tick(now){
-    if(!running) return;
-    left -= now - last;
-    last = now;
-    if(left <= 0){ finish(); return; }
-    tip.textContent = '还剩 ' + (left / 1000).toFixed(1) + ' 秒';
-    raf = requestAnimationFrame(tick);
+  function placeFood(){
+    const free = [];
+    for(let y = 0; y < N; y++) for(let x = 0; x < N; x++){
+      if(!snake.some(s => s.x === x && s.y === y)) free.push({x:x, y:y});
+    }
+    food = free.length ? free[Math.floor(Math.random() * free.length)] : {x:0, y:0};
+  }
+
+  function roundRect(x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function draw(){
+    const size = cellPx * N;
+    ctx.clearRect(0, 0, size, size);
+    ctx.fillStyle = 'rgba(255,255,255,.42)';
+    ctx.fillRect(0, 0, size, size);
+    ctx.strokeStyle = 'rgba(155,89,182,.09)';
+    ctx.lineWidth = 1;
+    for(let i = 1; i < N; i++){
+      ctx.beginPath(); ctx.moveTo(i * cellPx, 0.5); ctx.lineTo(i * cellPx, size); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0.5, i * cellPx); ctx.lineTo(size, i * cellPx); ctx.stroke();
+    }
+    ctx.fillStyle = '#D67492';
+    ctx.beginPath();
+    ctx.arc((food.x + 0.5) * cellPx, (food.y + 0.5) * cellPx, cellPx * 0.34, 0, Math.PI * 2);
+    ctx.fill();
+    const pad = Math.max(1.5, cellPx * 0.12);
+    for(let i = snake.length - 1; i >= 0; i--){
+      const s = snake[i];
+      ctx.fillStyle = i === 0 ? '#9B59B6' : (i % 2 ? '#B681CE' : '#AD76C5');
+      roundRect(s.x * cellPx + pad, s.y * cellPx + pad,
+        cellPx - pad * 2, cellPx - pad * 2, Math.max(3, cellPx * 0.28));
+      ctx.fill();
+    }
+  }
+
+  function reset(){
+    snake = [{x:7, y:7}, {x:6, y:7}, {x:5, y:7}];
+    dir = {x:1, y:0};
+    want = {x:1, y:0};
+    score = 0;
+    scoreEl.textContent = '0';
+    placeFood();
+    draw();
   }
 
   function finish(){
     running = false;
     cancelAnimationFrame(raf);
-    if(lit >= 0){ cells[lit].classList.remove('lit'); lit = -1; }
     if(score > best){
       best = score;
       bestEl.textContent = String(best);
@@ -2164,33 +2406,1495 @@ function initGame(){
     startBtn.textContent = '再来一局';
   }
 
-  grid.addEventListener('click', event => {
-    const cell = event.target.closest('.cell');
-    if(!cell || !running) return;
-    if(Number(cell.dataset.i) === lit){
+  function step(){
+    dir = want;
+    const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+    if(head.x < 0 || head.y < 0 || head.x >= N || head.y >= N){ finish(); return; }
+    for(let i = 0; i < snake.length - 1; i++){
+      if(snake[i].x === head.x && snake[i].y === head.y){ finish(); return; }
+    }
+    snake.unshift(head);
+    if(head.x === food.x && head.y === food.y){
       score++;
       scoreEl.textContent = String(score);
-      light();
+      placeFood();
     }else{
-      left -= 2000;
-      cell.classList.add('miss');
-      setTimeout(() => cell.classList.remove('miss'), 220);
-      if(left <= 0) finish();
+      snake.pop();
     }
-  });
+    draw();
+  }
+
+  function loop(now){
+    if(!running) return;
+    acc += now - last;
+    last = now;
+    while(acc >= STEP){
+      acc -= STEP;
+      step();
+      if(!running) return;
+    }
+    raf = requestAnimationFrame(loop);
+  }
+
+  function turn(nx, ny){
+    if(nx === -dir.x && ny === -dir.y) return;
+    want = {x:nx, y:ny};
+  }
 
   startBtn.addEventListener('click', () => {
-    score = 0;
-    left = 20000;
-    scoreEl.textContent = '0';
+    reset();
+    tip.textContent = '方向键或滑动控制，吃到紫点长一截。';
     startBtn.textContent = '重开';
-    tip.textContent = '亮起来的那格点一下，点错扣 2 秒。';
     running = true;
-    light();
+    acc = 0;
     last = performance.now();
     cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(tick);
+    raf = requestAnimationFrame(loop);
   });
+
+  window.addEventListener('keydown', event => {
+    const k = event.key;
+    if(k === 'ArrowLeft' || k === 'a') turn(-1, 0);
+    else if(k === 'ArrowRight' || k === 'd') turn(1, 0);
+    else if(k === 'ArrowUp' || k === 'w') turn(0, -1);
+    else if(k === 'ArrowDown' || k === 's') turn(0, 1);
+    else return;
+    if(running) event.preventDefault();
+  });
+
+  let fromX = 0, fromY = 0, tracking = false;
+  cv.addEventListener('pointerdown', e => {
+    tracking = true;
+    fromX = e.clientX;
+    fromY = e.clientY;
+    try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  cv.addEventListener('pointermove', e => {
+    if(!tracking) return;
+    const dx = e.clientX - fromX, dy = e.clientY - fromY;
+    if(Math.abs(dx) < 16 && Math.abs(dy) < 16) return;
+    if(Math.abs(dx) > Math.abs(dy)) turn(dx > 0 ? 1 : -1, 0);
+    else turn(0, dy > 0 ? 1 : -1);
+    tracking = false;
+  });
+  cv.addEventListener('pointerup', () => { tracking = false; });
+  cv.addEventListener('pointercancel', () => { tracking = false; });
+
+  cv._resize = resize;
+  window.addEventListener('resize', resize);
+  reset();
+  resize();
+  setTimeout(resize, 80);
+}
+
+
+/* ===== 经典像素小游戏 ===== */
+var PX = {
+  bg: '#151122', bg2: '#1E1930', grid: '#241E3A', ink: '#F4EEE1',
+  dim: '#7C7495', pur: '#9B59B6', purL: '#C58BE0', pink: '#D67492',
+  yel: '#F0C46A', grn: '#77C79D', red: '#E6636C', blue: '#6FA8DC'
+};
+
+function pxR(g, x, y, w, h, c) {
+  g.fillStyle = c;
+  g.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+}
+
+function pxStage(cv, W, H) {
+  var ctx = cv.getContext('2d');
+  var buf = document.createElement('canvas');
+  buf.width = W;
+  buf.height = H;
+  var g = buf.getContext('2d');
+  g.imageSmoothingEnabled = false;
+  function fit() {
+    var cw = cv.clientWidth || W * 3;
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(cw * dpr);
+    cv.height = Math.round(cw * dpr * H / W);
+    ctx.imageSmoothingEnabled = false;
+  }
+  fit();
+  if (!window.__pxFit) window.__pxFit = [];
+  window.__pxFit.push(fit);
+  return {
+    g: g,
+    W: W,
+    H: H,
+    fit: fit,
+    show: function () {
+      ctx.imageSmoothingEnabled = false;
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      ctx.drawImage(buf, 0, 0, cv.width, cv.height);
+    }
+  };
+}
+
+window.addEventListener('resize', function () {
+  if (!window.__pxFit) return;
+  for (var i = 0; i < window.__pxFit.length; i++) window.__pxFit[i]();
+});
+
+/* ---------- 贪吃蛇 ---------- */
+function initSnake() {
+  var cv = byId('snake-canvas');
+  if (!cv) return null;
+  var N = 15, CELL = 6, OFF = 3, W = 96, H = 96;
+  var st = pxStage(cv, W, H);
+  var g = st.g;
+  var scoreEl = byId('snake-score'), bestEl = byId('snake-best');
+  var startBtn = byId('snake-start'), tip = byId('snake-tip');
+  var BEST = 'liuzhi.snake.v1';
+  var best = 0;
+  try { best = Number(localStorage.getItem(BEST)) || 0; } catch (e) {}
+  bestEl.textContent = String(best);
+
+  var body, dir, want, food, score = 0, running = false, paused = false;
+  var acc = 0, last = 0, raf = 0;
+
+  function reset() {
+    body = [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }];
+    dir = { x: 1, y: 0 };
+    want = { x: 1, y: 0 };
+    score = 0;
+    scoreEl.textContent = '0';
+    placeFood();
+    draw();
+  }
+
+  function placeFood() {
+    do {
+      food = { x: Math.floor(Math.random() * N), y: Math.floor(Math.random() * N) };
+    } while (body.some(function (s) { return s.x === food.x && s.y === food.y; }));
+  }
+
+  function cellAt(x, y, col) {
+    pxR(g, OFF + x * CELL, OFF + y * CELL, CELL - 1, CELL - 1, col);
+  }
+
+  function draw() {
+    pxR(g, 0, 0, W, H, PX.bg);
+    for (var y = 0; y < N; y++) {
+      for (var x = 0; x < N; x++) {
+        pxR(g, OFF + x * CELL, OFF + y * CELL, CELL - 1, CELL - 1,
+          ((x + y) % 2 === 0) ? PX.bg2 : PX.grid);
+      }
+    }
+    var blink = (Date.now() % 600) < 400;
+    if (blink) {
+      pxR(g, OFF + food.x * CELL, OFF + food.y * CELL, CELL - 1, CELL - 1, PX.yel);
+      pxR(g, OFF + food.x * CELL + 1, OFF + food.y * CELL + 1, 2, 2, '#FFF6DC');
+    }
+    for (var i = body.length - 1; i >= 0; i--) {
+      var s = body[i];
+      cellAt(s.x, s.y, i === 0 ? PX.purL : PX.pur);
+    }
+    var head = body[0];
+    pxR(g, OFF + head.x * CELL + 3, OFF + head.y * CELL + 2, 2, 2, PX.ink);
+    pxR(g, 0, 0, W, 1, PX.dim);
+    pxR(g, 0, H - 1, W, 1, PX.dim);
+    pxR(g, 0, 0, 1, H, PX.dim);
+    pxR(g, W - 1, 0, 1, H, PX.dim);
+    st.show();
+  }
+
+  function step() {
+    dir = want;
+    var head = { x: body[0].x + dir.x, y: body[0].y + dir.y };
+    if (head.x < 0 || head.y < 0 || head.x >= N || head.y >= N) return over();
+    for (var i = 0; i < body.length - 1; i++) {
+      if (body[i].x === head.x && body[i].y === head.y) return over();
+    }
+    if (head.x === food.x && head.y === food.y) {
+      body.unshift(head);
+      score++;
+      scoreEl.textContent = String(score);
+      if (score > best) {
+        best = score;
+        bestEl.textContent = String(best);
+        try { localStorage.setItem(BEST, String(best)); } catch (e) {}
+      }
+      placeFood();
+    } else {
+      body.unshift(head);
+      body.pop();
+    }
+  }
+
+  function over() {
+    running = false;
+    startBtn.textContent = '再来一局';
+    tip.textContent = '这局 ' + score + ' 分，撞墙或撞自己就结束。';
+  }
+
+  function loop(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    if (paused) { last = now; return; }
+    var dt = now - last;
+    last = now;
+    acc += dt;
+    if (acc >= 120) {
+      acc = 0;
+      step();
+      if (!running) { draw(); return; }
+    }
+    draw();
+  }
+
+  function start() {
+    reset();
+    startBtn.textContent = '重开';
+    tip.textContent = '方向键或滑动控制，吃掉黄点长一截。';
+    running = true;
+    paused = false;
+    acc = 0;
+    last = performance.now();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  }
+
+  function turn(nx, ny) {
+    if (nx === -dir.x && ny === -dir.y) return;
+    want = { x: nx, y: ny };
+  }
+
+  window.addEventListener('keydown', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'arrowleft' || k === 'a') turn(-1, 0);
+    else if (k === 'arrowright' || k === 'd') turn(1, 0);
+    else if (k === 'arrowup' || k === 'w') turn(0, -1);
+    else if (k === 'arrowdown' || k === 's') turn(0, 1);
+    else return;
+    if (running) e.preventDefault();
+  });
+
+  var tx = 0, ty = 0;
+  cv.addEventListener('pointerdown', function (e) {
+    tx = e.clientX; ty = e.clientY;
+  });
+  cv.addEventListener('pointerup', function (e) {
+    var dx = e.clientX - tx, dy = e.clientY - ty;
+    if (Math.abs(dx) < 16 && Math.abs(dy) < 16) return;
+    if (Math.abs(dx) > Math.abs(dy)) turn(dx > 0 ? 1 : -1, 0);
+    else turn(0, dy > 0 ? 1 : -1);
+  });
+
+  var spad = byId('pane-snake');
+  if (spad) {
+    spad.querySelectorAll('.pad button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var a = btn.dataset.s;
+        if (a === 'left') turn(-1, 0);
+        else if (a === 'right') turn(1, 0);
+        else if (a === 'up') turn(0, -1);
+        else if (a === 'down') turn(0, 1);
+      });
+    });
+  }
+
+  startBtn.addEventListener('click', start);
+  reset();
+  return {
+    pause: function () { paused = true; },
+    resume: function () { paused = false; st.fit(); draw(); }
+  };
+}
+
+/* ---------- 拳皇（对打） ---------- */
+function initKof() {
+  var cv = byId('kof-canvas');
+  if (!cv) return null;
+  var W = 160, H = 90, GROUND = 76;
+  var st = pxStage(cv, W, H);
+  var g = st.g;
+  var scoreEl = byId('kof-score'), bestEl = byId('kof-best');
+  var startBtn = byId('kof-start'), tip = byId('kof-tip');
+  var hpYou = byId('kof-hp-you').firstElementChild;
+  var hpFoe = byId('kof-hp-foe').firstElementChild;
+  var BEST = 'liuzhi.kof.v1';
+  var best = 0;
+  try { best = Number(localStorage.getItem(BEST)) || 0; } catch (e) {}
+  bestEl.textContent = String(best);
+
+  var me, foe, running = false, paused = false, raf = 0, last = 0, wins = 0;
+  var keys = { left: false, right: false, block: false };
+
+  function mk(x, color, face) {
+    return { x: x, y: GROUND, vy: 0, hp: 100, color: color, face: face,
+      act: 'idle', t: 0, cd: 0, done: true, block: false, pow: 0, reach: 0 };
+  }
+
+  function reset() {
+    me = mk(50, PX.pur, 1);
+    foe = mk(110, PX.pink, -1);
+    hpYou.style.width = '100%';
+    hpFoe.style.width = '100%';
+    draw();
+  }
+
+  function drawFighter(f, isMe) {
+    var hurt = f.act === 'hurt';
+    var body = hurt ? PX.ink : f.color;
+    var dark = hurt ? '#CFC8B8' : (isMe ? '#6F3E85' : '#A8566F');
+    var face = f.face;
+    var x = f.x, y = f.y;
+
+    pxR(g, x - 5, y - 1, 10, 1, 'rgba(0,0,0,.5)');
+    // 腿
+    pxR(g, x - 4, y - 9, 3, 8, dark);
+    pxR(g, x + 1, y - 9, 3, 8, dark);
+    pxR(g, x - 4, y - 2, 4, 2, '#2A2440');
+    pxR(g, x + 1, y - 2, 4, 2, '#2A2440');
+    // 身体
+    pxR(g, x - 4, y - 21, 8, 12, body);
+    pxR(g, x - 4, y - 21, 8, 1, lighten(body));
+    pxR(g, x - 4, y - 12, 8, 2, dark);
+    // 头
+    pxR(g, x - 3, y - 27, 6, 6, body);
+    pxR(g, x - 3, y - 27, 6, 1, lighten(body));
+    pxR(g, x + (face > 0 ? 1 : -2), y - 25, 2, 2, PX.ink);
+
+    if (f.act === 'punch') {
+      pxR(g, x + (face > 0 ? 4 : -11), y - 19, 7, 3, lighten(body));
+      pxR(g, x + (face > 0 ? 10 : -12), y - 19, 2, 3, PX.ink);
+    } else if (f.act === 'kick') {
+      pxR(g, x + (face > 0 ? 2 : -10), y - 7, 8, 3, lighten(body));
+      pxR(g, x + (face > 0 ? 9 : -11), y - 8, 2, 4, '#2A2440');
+    } else {
+      pxR(g, x + (face > 0 ? 4 : -7), y - 20, 3, 5, body);
+      pxR(g, x + (face > 0 ? 6 : -8), y - 16, 2, 2, dark);
+    }
+    if (f.block) {
+      pxR(g, x + (face > 0 ? 7 : -9), y - 24, 2, 15, PX.yel);
+      pxR(g, x + (face > 0 ? 7 : -9), y - 24, 2, 1, PX.ink);
+    }
+  }
+
+  function lighten(c) {
+    if (c === PX.pur) return PX.purL;
+    if (c === PX.pink) return '#EFA9BD';
+    return c;
+  }
+
+  function draw() {
+    pxR(g, 0, 0, W, H, PX.bg);
+    for (var i = 0; i < 18; i++) {
+      pxR(g, (i * 37) % W, (i * 23) % 60, 1, 1, PX.dim);
+    }
+    // 月亮（像素圆）
+    var moonRows = [6, 10, 14, 16, 16, 14, 10, 6];
+    for (var mrow = 0; mrow < moonRows.length; mrow++) {
+      pxR(g, 126 - moonRows[mrow] / 2, 10 + mrow, moonRows[mrow], 1, '#4A3F6E');
+      pxR(g, 126 - moonRows[mrow] / 2, 10 + mrow, moonRows[mrow] - 3, 1, PX.bg);
+    }
+    // 地平线
+    pxR(g, 0, GROUND, W, 1, '#463A66');
+    pxR(g, 0, GROUND + 1, W, H - GROUND - 1, PX.bg2);
+    for (var k = 6; k < W; k += 11) pxR(g, k, GROUND + 4, 4, 1, PX.grid);
+    drawFighter(me, true);
+    drawFighter(foe, false);
+    pxR(g, 0, 0, W, 1, PX.dim);
+    pxR(g, 0, H - 1, W, 1, PX.dim);
+    st.show();
+  }
+
+  function sethp() {
+    hpYou.style.width = Math.max(0, Math.round(me.hp)) + '%';
+    hpFoe.style.width = Math.max(0, Math.round(foe.hp)) + '%';
+  }
+
+  function attack(f, isMe, kind, pow, reach, cool) {
+    if (f.cd > 0 || f.act === 'punch' || f.act === 'kick' || f.act === 'hurt') return;
+    f.act = kind;
+    f.t = kind === 'kick' ? 230 : 170;
+    f.cd = cool;
+    f.done = false;
+    f.pow = pow;
+    f.reach = reach;
+  }
+
+  function checkHit(a, b) {
+    if (a.act !== 'punch' && a.act !== 'kick') return;
+    if (a.done || a.t < 40) return;
+    if (Math.abs(a.x - b.x) > a.reach) return;
+    if (Math.abs(a.y - b.y) > 18) return;
+    a.done = true;
+    var dmg = b.block ? Math.round(a.pow * 0.3) : a.pow;
+    b.hp -= dmg;
+    b.act = 'hurt';
+    b.t = 250;
+    b.x += (b.x > a.x ? 1 : -1) * (a.act === 'kick' ? 7 : 5);
+    if (b.hp <= 0) { b.hp = 0; finish(b === foe); }
+    sethp();
+  }
+
+  function finish(win) {
+    running = false;
+    cancelAnimationFrame(raf);
+    startBtn.textContent = '再来一局';
+    if (win) {
+      wins++;
+      scoreEl.textContent = String(wins);
+      if (wins > best) {
+        best = wins;
+        bestEl.textContent = String(best);
+        try { localStorage.setItem(BEST, String(best)); } catch (e) {}
+      }
+      tip.textContent = '这局赢了，对手血量清零。';
+    } else {
+      tip.textContent = '被对手打倒，再来一局。';
+    }
+    draw();
+  }
+
+  function step(dt) {
+    [me, foe].forEach(function (f) {
+      f.vy += 150 * dt;
+      f.y += f.vy * dt;
+      if (f.y >= GROUND) { f.y = GROUND; f.vy = 0; }
+      if (f.t > 0) {
+        f.t -= dt * 1000;
+        if (f.t <= 0 && f.act !== 'idle') f.act = 'idle';
+      }
+      if (f.cd > 0) f.cd -= dt * 1000;
+      f.x = Math.max(26, Math.min(134, f.x));
+    });
+
+    if (me.act === 'idle' && me.y >= GROUND) {
+      if (keys.left) me.x -= 34 * dt;
+      if (keys.right) me.x += 34 * dt;
+    }
+    me.block = keys.block;
+    me.face = foe.x >= me.x ? 1 : -1;
+    foe.face = me.x >= foe.x ? 1 : -1;
+
+    var gap = Math.abs(me.x - foe.x);
+    if (foe.act === 'idle' && foe.cd <= 0) {
+      if (gap > 29) {
+        foe.x += (me.x > foe.x ? 1 : -1) * 24 * dt;
+      } else if (Math.random() < dt * 1.9) {
+        var kick = Math.random() < 0.38;
+        attack(foe, false, kick ? 'kick' : 'punch', kick ? 14 : 10, kick ? 39 : 31, 400);
+      } else if (Math.random() < dt * 0.5) {
+        foe.block = true;
+        var f = foe;
+        setTimeout(function () { f.block = false; }, 300);
+      }
+    }
+    checkHit(me, foe);
+    checkHit(foe, me);
+    draw();
+  }
+
+  function loop(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    if (paused) { last = now; return; }
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    step(dt);
+  }
+
+  function start() {
+    reset();
+    startBtn.textContent = '重开';
+    tip.textContent = '← → 上步，跳 / 拳 / 腿 / 防；把对手血量打到 0。';
+    running = true;
+    paused = false;
+    last = performance.now();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  }
+
+  function jump() {
+    if (me && me.y >= GROUND && me.act === 'idle') me.vy = -78;
+  }
+
+  window.addEventListener('keydown', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = true;
+    else if (k === 'd' || k === 'arrowright') keys.right = true;
+    else if (k === 'w' || k === 'arrowup') jump();
+    else if (k === 'j') attack(me, true, 'punch', 12, 33, 330);
+    else if (k === 'k') attack(me, true, 'kick', 19, 42, 520);
+    else if (k === 'l') keys.block = true;
+    else return;
+    if (running) e.preventDefault();
+  });
+  window.addEventListener('keyup', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = false;
+    else if (k === 'd' || k === 'arrowright') keys.right = false;
+    else if (k === 'l') keys.block = false;
+  });
+
+  var pad = byId('pane-kof');
+  if (pad) {
+    pad.querySelectorAll('.pad button').forEach(function (btn) {
+      var act = btn.dataset.k;
+      function down(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = true;
+        else if (act === 'right') keys.right = true;
+        else if (act === 'jump') jump();
+        else if (act === 'punch') attack(me, true, 'punch', 12, 33, 330);
+        else if (act === 'kick') attack(me, true, 'kick', 19, 42, 520);
+        else if (act === 'block') keys.block = true;
+      }
+      function up(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = false;
+        else if (act === 'right') keys.right = false;
+        else if (act === 'block') keys.block = false;
+      }
+      btn.addEventListener('pointerdown', down);
+      btn.addEventListener('pointerup', up);
+      btn.addEventListener('pointercancel', up);
+      btn.addEventListener('pointerleave', up);
+    });
+  }
+
+  startBtn.addEventListener('click', start);
+  reset();
+  return {
+    pause: function () { paused = true; },
+    resume: function () { paused = false; st.fit(); draw(); }
+  };
+}
+
+/* ---------- 魂斗罗（横版射击） ---------- */
+function initContra() {
+  var cv = byId('ct-canvas');
+  if (!cv) return null;
+  var W = 160, H = 90, GROUND = 76;
+  var st = pxStage(cv, W, H);
+  var g = st.g;
+  var scoreEl = byId('ct-score'), lifeEl = byId('ct-life');
+  var startBtn = byId('ct-start'), tip = byId('ct-tip');
+  var BEST = 'liuzhi.contra.v1';
+  var best = 0;
+  try { best = Number(localStorage.getItem(BEST)) || 0; } catch (e) {}
+  if (best) tip.textContent = '最高 ' + best + ' 分。';
+
+  var p, bullets, foes, running = false, paused = false, raf = 0, last = 0;
+  var score = 0, lives = 3, dist = 0, spawnAt = 0;
+  var keys = { left: false, right: false };
+
+  function reset() {
+    p = { x: 27, y: GROUND, vy: 0, cool: 0, invul: 0 };
+    bullets = [];
+    foes = [];
+    score = 0;
+    lives = 3;
+    dist = 0;
+    spawnAt = 600;
+    scoreEl.textContent = '0';
+    lifeEl.textContent = '3';
+    draw();
+  }
+
+  function fire() {
+    if (!running || !p || p.cool > 0) return;
+    p.cool = 230;
+    bullets.push({ x: p.x + 9, y: p.y - 12 });
+  }
+
+  function jump() {
+    if (p && p.y >= GROUND) p.vy = -80;
+  }
+
+  function draw() {
+    pxR(g, 0, 0, W, H, PX.bg);
+    // 星
+    for (var i = 0; i < 22; i++) {
+      pxR(g, (i * 29 + 3) % W, (i * 13 + 5) % 50, 1, 1, (i % 3 === 0) ? PX.ink : PX.dim);
+    }
+    // 远山（像素三角）
+    for (var m = 0; m < 5; m++) {
+      var bx = Math.round(((m * 44 - dist * 0.5) % (W + 44) + W + 44) % (W + 44) - 22);
+      for (var r = 0; r < 14; r++) {
+        var w2 = 14 - r;
+        pxR(g, bx - w2, GROUND - 14 + r, w2 * 2, 1, '#241D3B');
+      }
+    }
+    // 地面
+    pxR(g, 0, GROUND, W, 1, '#4B3D6E');
+    pxR(g, 0, GROUND + 1, W, H - GROUND - 1, PX.bg2);
+    for (var k = 0; k < W; k += 7) {
+      pxR(g, k, GROUND + 3, 3, 1, PX.grid);
+    }
+    // 敌人
+    for (var e = 0; e < foes.length; e++) {
+      var f = foes[e];
+      pxR(g, f.x - 2, f.y - 12, 4, 4, PX.pink);
+      pxR(g, f.x - 3, f.y - 8, 6, 7, '#A85A73');
+      pxR(g, f.x + 1, f.y - 5, 3, 2, PX.red);
+    }
+    // 子弹
+    for (var b = 0; b < bullets.length; b++) {
+      pxR(g, bullets[b].x, bullets[b].y, 3, 1, PX.yel);
+    }
+    // 自己
+    if (p) {
+      var blink = p.invul > 0 && (Date.now() % 180 < 90);
+      if (!blink) {
+        pxR(g, p.x - 2, p.y - 15, 4, 4, PX.ink);
+        pxR(g, p.x - 3, p.y - 11, 6, 7, '#3A3157');
+        pxR(g, p.x - 3, p.y - 11, 6, 1, PX.dim);
+        pxR(g, p.x + 3, p.y - 8, 6, 2, PX.ink);
+        pxR(g, p.x - 1, p.y - 4, 2, 4, '#2A2440');
+        pxR(g, p.x + 2, p.y - 4, 2, 4, '#2A2440');
+      }
+    }
+    pxR(g, 0, 0, W, 1, PX.dim);
+    pxR(g, 0, H - 1, W, 1, PX.dim);
+    st.show();
+  }
+
+  function shootHit() {
+    for (var i = foes.length - 1; i >= 0; i--) {
+      for (var j = bullets.length - 1; j >= 0; j--) {
+        var f = foes[i], b = bullets[j];
+        if (Math.abs(b.x - f.x) < 5 && b.y > f.y - 14 && b.y < f.y - 1) {
+          bullets.splice(j, 1);
+          foes.splice(i, 1);
+          score += 10;
+          scoreEl.textContent = String(score);
+          break;
+        }
+      }
+    }
+  }
+
+  function step(dt) {
+    dist += 110 * dt;
+    if (p.cool > 0) p.cool -= dt * 1000;
+    if (p.invul > 0) p.invul -= dt * 1000;
+
+    p.vy += 150 * dt;
+    p.y += p.vy * dt;
+    if (p.y >= GROUND) { p.y = GROUND; p.vy = 0; }
+    if (keys.left) p.x -= 37 * dt;
+    if (keys.right) p.x += 37 * dt;
+    p.x = Math.max(17, Math.min(107, p.x));
+
+    for (var i = bullets.length - 1; i >= 0; i--) {
+      bullets[i].x += 155 * dt;
+      if (bullets[i].x > W) bullets.splice(i, 1);
+    }
+
+    spawnAt -= dt * 1000;
+    if (spawnAt <= 0) {
+      spawnAt = 680 + Math.random() * 520;
+      foes.push({ x: W + 12, y: GROUND, v: 17 + Math.random() * 11 });
+    }
+    for (var j = foes.length - 1; j >= 0; j--) {
+      foes[j].x -= foes[j].v * dt;
+      if (foes[j].x < -16) foes.splice(j, 1);
+    }
+
+    if (p.invul <= 0) {
+      for (var m = foes.length - 1; m >= 0; m--) {
+        var fe = foes[m];
+        if (Math.abs(fe.x - p.x) < 8 && Math.abs(fe.y - p.y) < 20) {
+          foes.splice(m, 1);
+          lives--;
+          lifeEl.textContent = String(Math.max(0, lives));
+          p.invul = 1400;
+          if (lives <= 0) {
+            running = false;
+            cancelAnimationFrame(raf);
+            startBtn.textContent = '再来一局';
+            if (score > best) {
+              best = score;
+              try { localStorage.setItem(BEST, String(best)); } catch (e) {}
+            }
+            tip.textContent = '这局 ' + score + ' 分，最高 ' + best + '。';
+            draw();
+            return;
+          }
+          break;
+        }
+      }
+    }
+
+    shootHit();
+    draw();
+  }
+
+  function loop(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    if (paused) { last = now; return; }
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    step(dt);
+  }
+
+  startBtn.addEventListener('click', function () {
+    reset();
+    startBtn.textContent = '重开';
+    tip.textContent = '← → 走位，跳可以躲，射击键按住连发。';
+    running = true;
+    paused = false;
+    last = performance.now();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  });
+
+  window.addEventListener('keydown', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = true;
+    else if (k === 'd' || k === 'arrowright') keys.right = true;
+    else if (k === 'w' || k === 'arrowup') jump();
+    else if (k === 'j' || k === ' ') fire();
+    else return;
+    if (running) e.preventDefault();
+  });
+  window.addEventListener('keyup', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = false;
+    else if (k === 'd' || k === 'arrowright') keys.right = false;
+  });
+
+  var pane = byId('pane-contra');
+  if (pane) {
+    pane.querySelectorAll('.pad button').forEach(function (btn) {
+      var act = btn.dataset.c;
+      function down(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = true;
+        else if (act === 'right') keys.right = true;
+        else if (act === 'jump') jump();
+        else if (act === 'fire') fire();
+      }
+      function up(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = false;
+        else if (act === 'right') keys.right = false;
+      }
+      btn.addEventListener('pointerdown', down);
+      btn.addEventListener('pointerup', up);
+      btn.addEventListener('pointercancel', up);
+      btn.addEventListener('pointerleave', up);
+    });
+  }
+
+  reset();
+  return {
+    pause: function () { paused = true; },
+    resume: function () { paused = false; st.fit(); draw(); }
+  };
+}
+
+/* ---------- 俄罗斯方块 ---------- */
+function initTetris() {
+  var cv = byId('tet-canvas');
+  if (!cv) return null;
+  var BW = 10, BH = 18, CELL = 4, OX = 8, OY = 10, W = 100, H = 90;
+  var st = pxStage(cv, W, H);
+  var g = st.g;
+  var scoreEl = byId('tet-score'), bestEl = byId('tet-best');
+  var startBtn = byId('tet-start'), tip = byId('tet-tip');
+  var BEST = 'liuzhi.tetris.v1';
+  var best = 0;
+  try { best = Number(localStorage.getItem(BEST)) || 0; } catch (e) {}
+  bestEl.textContent = String(best);
+
+  var SH = {
+    I: ['1111'],
+    O: ['11', '11'],
+    T: ['111', '010'],
+    S: ['011', '110'],
+    Z: ['110', '011'],
+    J: ['100', '111'],
+    L: ['001', '111']
+  };
+  var COL = { I: PX.blue, O: PX.yel, T: PX.pur, S: PX.grn, Z: PX.red, J: PX.purL, L: PX.pink };
+
+  var grid, cur, nextKey, running = false, paused = false, raf = 0;
+  var score = 0, lines = 0, dropMs = 600, acc = 0, last = 0;
+  var keys = { left: false, right: false, down: false };
+
+  function mat(key) {
+    return SH[key].map(function (r) {
+      return r.split('').map(function (ch) { return ch === '1'; });
+    });
+  }
+
+  function rotate(m) {
+    var h = m.length, w = m[0].length, out = [];
+    for (var y = 0; y < w; y++) {
+      var row = [];
+      for (var x = 0; x < h; x++) row.push(m[h - 1 - x][y]);
+      out.push(row);
+    }
+    return out;
+  }
+
+  function reset() {
+    grid = [];
+    for (var y = 0; y < BH; y++) {
+      var row = [];
+      for (var x = 0; x < BW; x++) row.push(null);
+      grid.push(row);
+    }
+    score = 0;
+    lines = 0;
+    dropMs = 600;
+    scoreEl.textContent = '0';
+    nextKey = pick();
+    spawn();
+    draw();
+  }
+
+  function pick() {
+    var keysList = Object.keys(SH);
+    return keysList[Math.floor(Math.random() * keysList.length)];
+  }
+
+  function spawn() {
+    var k = nextKey || pick();
+    nextKey = pick();
+    var m = mat(k);
+    cur = { k: k, m: m, x: Math.floor((BW - m[0].length) / 2), y: 0 };
+  }
+
+  function hit(m, x0, y0) {
+    for (var y = 0; y < m.length; y++) {
+      for (var x = 0; x < m[y].length; x++) {
+        if (!m[y][x]) continue;
+        var gx = x0 + x, gy = y0 + y;
+        if (gx < 0 || gx >= BW || gy >= BH) return true;
+        if (gy >= 0 && grid[gy][gx]) return true;
+      }
+    }
+    return false;
+  }
+
+  function lock() {
+    for (var y = 0; y < cur.m.length; y++) {
+      for (var x = 0; x < cur.m[y].length; x++) {
+        if (!cur.m[y][x]) continue;
+        var gy = cur.y + y, gx = cur.x + x;
+        if (gy >= 0 && gy < BH && gx >= 0 && gx < BW) grid[gy][gx] = cur.k;
+      }
+    }
+    var cleared = 0;
+    for (var r = BH - 1; r >= 0; r--) {
+      var full = true;
+      for (var c = 0; c < BW; c++) if (!grid[r][c]) { full = false; break; }
+      if (full) {
+        grid.splice(r, 1);
+        var nr = [];
+        for (var c2 = 0; c2 < BW; c2++) nr.push(null);
+        grid.unshift(nr);
+        cleared++;
+        r++;
+      }
+    }
+    if (cleared) {
+      score += [0, 100, 300, 500, 800][cleared] || 800;
+      lines += cleared;
+      dropMs = Math.max(140, 600 - lines * 26);
+      scoreEl.textContent = String(score);
+      if (score > best) {
+        best = score;
+        bestEl.textContent = String(best);
+        try { localStorage.setItem(BEST, String(best)); } catch (e) {}
+      }
+    }
+    spawn();
+    if (hit(cur.m, cur.x, cur.y)) {
+      running = false;
+      cancelAnimationFrame(raf);
+      startBtn.textContent = '再来一局';
+      tip.textContent = '这局 ' + score + ' 分，消了 ' + lines + ' 行。';
+    }
+  }
+
+  function drawCell(x, y, col) {
+    var px = OX + x * CELL, py = OY + y * CELL;
+    pxR(g, px, py, CELL - 1, CELL - 1, col);
+    pxR(g, px, py, CELL - 1, 1, 'rgba(255,255,255,.35)');
+  }
+
+  function draw() {
+    pxR(g, 0, 0, W, H, PX.bg);
+    pxR(g, OX - 1, OY - 1, BW * CELL + 1, BH * CELL + 1, PX.dim);
+    pxR(g, OX, OY, BW * CELL - (BW - 1), BH * CELL - (BH - 1), PX.bg2);
+    for (var y = 0; y < BH; y++) {
+      for (var x = 0; x < BW; x++) {
+        pxR(g, OX + x * CELL, OY + y * CELL, CELL - 1, CELL - 1, ((x + y) % 2) ? '#191428' : '#1B1630');
+        if (grid && grid[y][x]) drawCell(x, y, COL[grid[y][x]]);
+      }
+    }
+    if (cur) {
+      for (var r = 0; r < cur.m.length; r++) {
+        for (var c = 0; c < cur.m[r].length; c++) {
+          if (cur.m[r][c]) drawCell(cur.x + c, cur.y + r, COL[cur.k]);
+        }
+      }
+    }
+    // 右侧：下一个
+    pxR(g, 58, 12, 34, 28, PX.bg2);
+    pxR(g, 58, 12, 34, 1, PX.dim);
+    pxR(g, 58, 39, 34, 1, PX.dim);
+    if (nextKey) {
+      var nm = mat(nextKey), nw = nm[0].length;
+      for (var ny = 0; ny < nm.length; ny++) {
+        for (var nx = 0; nx < nw; nx++) {
+          if (!nm[ny][nx]) continue;
+          pxR(g, 66 + nx * 4 + (6 - nw) * 2, 20 + ny * 4, 3, 3, COL[nextKey]);
+        }
+      }
+    }
+    pxR(g, 58, 48, 34, 1, PX.dim);
+    pxR(g, 58, 50, 30, 1, PX.grid);
+    pxR(g, 58, 52, 22, 1, PX.grid);
+    pxR(g, 0, 0, W, 1, PX.dim);
+    pxR(g, 0, H - 1, W, 1, PX.dim);
+    st.show();
+  }
+
+  function move(dx) {
+    if (!running || paused) return;
+    if (!hit(cur.m, cur.x + dx, cur.y)) { cur.x += dx; draw(); }
+  }
+
+  function softDrop() {
+    if (!running || paused) return;
+    if (!hit(cur.m, cur.x, cur.y + 1)) { cur.y += 1; score += 1; scoreEl.textContent = String(score); draw(); }
+    else lock();
+  }
+
+  function doRotate() {
+    if (!running || paused) return;
+    var m = rotate(cur.m);
+    var nx = cur.x;
+    if (hit(m, nx, cur.y)) {
+      if (!hit(m, nx - 1, cur.y)) nx--;
+      else if (!hit(m, nx + 1, cur.y)) nx++;
+      else return;
+    }
+    cur.m = m;
+    cur.x = nx;
+    draw();
+  }
+
+  function hardDrop() {
+    if (!running || paused) return;
+    while (!hit(cur.m, cur.x, cur.y + 1)) cur.y++;
+    lock();
+    draw();
+  }
+
+  function loop(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    if (paused) { last = now; return; }
+    var dt = now - last;
+    last = now;
+    acc += dt;
+    if (acc >= dropMs) {
+      acc = 0;
+      if (!hit(cur.m, cur.x, cur.y + 1)) cur.y++;
+      else lock();
+      draw();
+      if (!running) return;
+    }
+    if (keys.left) { keys.left = false; move(-1); }
+    if (keys.right) { keys.right = false; move(1); }
+    if (keys.down) { keys.down = false; softDrop(); }
+  }
+
+  function start() {
+    reset();
+    startBtn.textContent = '重开';
+    tip.textContent = '← → 移动，↓ 加速，转 旋转，落 直落。';
+    running = true;
+    paused = false;
+    acc = 0;
+    last = performance.now();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('keydown', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'arrowleft' || k === 'a') keys.left = true;
+    else if (k === 'arrowright' || k === 'd') keys.right = true;
+    else if (k === 'arrowdown' || k === 's') keys.down = true;
+    else if (k === 'arrowup' || k === 'w') doRotate();
+    else if (k === ' ') hardDrop();
+    else return;
+    if (running) e.preventDefault();
+  });
+
+  var pane = byId('pane-tetris');
+  if (pane) {
+    pane.querySelectorAll('.pad button').forEach(function (btn) {
+      var act = btn.dataset.t;
+      btn.addEventListener('pointerdown', function (ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = true;
+        else if (act === 'right') keys.right = true;
+        else if (act === 'down') keys.down = true;
+        else if (act === 'rot') doRotate();
+        else if (act === 'drop') hardDrop();
+      });
+    });
+  }
+
+  startBtn.addEventListener('click', start);
+  reset();
+  return {
+    pause: function () { paused = true; },
+    resume: function () { paused = false; st.fit(); draw(); }
+  };
+}
+
+/* ---------- 打砖块 ---------- */
+function initBreakout() {
+  var cv = byId('brk-canvas');
+  if (!cv) return null;
+  var W = 160, H = 90;
+  var st = pxStage(cv, W, H);
+  var g = st.g;
+  var scoreEl = byId('brk-score'), lifeEl = byId('brk-life');
+  var startBtn = byId('brk-start'), tip = byId('brk-tip');
+  var best = 0;
+  try { best = Number(localStorage.getItem('liuzhi.brk.v1')) || 0; } catch (e) {}
+
+  var paddle, ball, bricks, running = false, paused = false, raf = 0, last = 0;
+  var score = 0, lives = 3, served = false;
+  var keys = { left: false, right: false };
+
+  var ROWS = 4, COLS = 8, BW = 17, BH = 5, GX = 1, GY = 2, OX = 7, OY = 9;
+  var COLS_ROW = [PX.pink, PX.yel, PX.grn, PX.blue];
+
+  function reset() {
+    paddle = { x: (W - 26) / 2, y: 81, w: 26, h: 4 };
+    ball = { x: W / 2, y: 74, vx: 0, vy: 0, r: 2 };
+    bricks = [];
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        bricks.push({ x: OX + c * (BW + GX), y: OY + r * (BH + GY), w: BW, h: BH, col: COLS_ROW[r], alive: true });
+      }
+    }
+    score = 0;
+    lives = 3;
+    served = false;
+    scoreEl.textContent = '0';
+    lifeEl.textContent = '3';
+    draw();
+  }
+
+  function serve() {
+    if (!running || served) return;
+    served = true;
+    var a = -0.35 + Math.random() * 0.7;
+    ball.vx = 90 * Math.cos(a);
+    ball.vy = -90 * Math.sin(a) - 20;
+  }
+
+  function draw() {
+    pxR(g, 0, 0, W, H, PX.bg);
+    for (var s = 0; s < 14; s++) pxR(g, (s * 41) % W, (s * 17) % 60, 1, 1, PX.grid);
+    for (var i = 0; i < bricks.length; i++) {
+      var b = bricks[i];
+      if (!b.alive) continue;
+      pxR(g, b.x, b.y, b.w, b.h, b.col);
+      pxR(g, b.x, b.y, b.w, 1, 'rgba(255,255,255,.45)');
+      pxR(g, b.x, b.y + b.h - 1, b.w, 1, 'rgba(0,0,0,.28)');
+    }
+    pxR(g, paddle.x, paddle.y, paddle.w, paddle.h, PX.purL);
+    pxR(g, paddle.x, paddle.y, paddle.w, 1, PX.ink);
+    pxR(g, ball.x - ball.r, ball.y - ball.r, ball.r * 2, ball.r * 2, PX.yel);
+    pxR(g, 0, H - 1, W, 1, PX.dim);
+    pxR(g, 0, 0, W, 1, PX.dim);
+    st.show();
+  }
+
+  function step(dt) {
+    if (keys.left) paddle.x -= 70 * dt;
+    if (keys.right) paddle.x += 70 * dt;
+    paddle.x = Math.max(0, Math.min(W - paddle.w, paddle.x));
+
+    if (served) {
+      ball.x += ball.vx * dt;
+      ball.y += ball.vy * dt;
+
+      if (ball.x < 2) { ball.x = 2; ball.vx = Math.abs(ball.vx); }
+      if (ball.x > W - 2) { ball.x = W - 2; ball.vx = -Math.abs(ball.vx); }
+      if (ball.y < 2) { ball.y = 2; ball.vy = Math.abs(ball.vy); }
+
+      if (ball.y > paddle.y - 2 && ball.y < paddle.y + paddle.h &&
+          ball.x > paddle.x - 3 && ball.x < paddle.x + paddle.w + 3 && ball.vy > 0) {
+        ball.y = paddle.y - 2;
+        var off = (ball.x - (paddle.x + paddle.w / 2)) / (paddle.w / 2);
+        ball.vx = off * 95;
+        ball.vy = -Math.max(45, 85 - Math.abs(off) * 20);
+      }
+
+      for (var i = 0; i < bricks.length; i++) {
+        var b = bricks[i];
+        if (!b.alive) continue;
+        if (ball.x > b.x - 1 && ball.x < b.x + b.w + 1 && ball.y > b.y - 1 && ball.y < b.y + b.h + 1) {
+          b.alive = false;
+          score += 10;
+          scoreEl.textContent = String(score);
+          ball.vy = -ball.vy;
+          break;
+        }
+      }
+
+      if (ball.y > H + 4) {
+        lives--;
+        lifeEl.textContent = String(Math.max(0, lives));
+        served = false;
+        ball.x = W / 2;
+        ball.y = 74;
+        ball.vx = 0;
+        ball.vy = 0;
+        if (lives <= 0) {
+          running = false;
+          cancelAnimationFrame(raf);
+          startBtn.textContent = '再来一局';
+          if (score > best) {
+            best = score;
+            try { localStorage.setItem('liuzhi.brk.v1', String(best)); } catch (e) {}
+          }
+          tip.textContent = '这局 ' + score + ' 分，最高 ' + best + '。';
+        }
+      }
+
+      var leftBricks = bricks.some(function (b2) { return b2.alive; });
+      if (!leftBricks && running) {
+        running = false;
+        cancelAnimationFrame(raf);
+        startBtn.textContent = '再来一局';
+        tip.textContent = '全清了，' + score + ' 分。';
+      }
+    }
+    draw();
+  }
+
+  function loop(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    if (paused) { last = now; return; }
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    step(dt);
+  }
+
+  startBtn.addEventListener('click', function () {
+    reset();
+    startBtn.textContent = '重开';
+    tip.textContent = '← → 挡板移动，发球把球打出去。';
+    running = true;
+    paused = false;
+    last = performance.now();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  });
+
+  window.addEventListener('keydown', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = true;
+    else if (k === 'd' || k === 'arrowright') keys.right = true;
+    else if (k === ' ' || k === 'j') serve();
+    else return;
+    if (running) e.preventDefault();
+  });
+  window.addEventListener('keyup', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = false;
+    else if (k === 'd' || k === 'arrowright') keys.right = false;
+  });
+
+  var pane = byId('pane-breakout');
+  if (pane) {
+    pane.querySelectorAll('.pad button').forEach(function (btn) {
+      var act = btn.dataset.b;
+      function down(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = true;
+        else if (act === 'right') keys.right = true;
+        else if (act === 'serve') serve();
+      }
+      function up(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = false;
+        else if (act === 'right') keys.right = false;
+      }
+      btn.addEventListener('pointerdown', down);
+      btn.addEventListener('pointerup', up);
+      btn.addEventListener('pointercancel', up);
+      btn.addEventListener('pointerleave', up);
+    });
+  }
+
+  reset();
+  return {
+    pause: function () { paused = true; },
+    resume: function () { paused = false; st.fit(); draw(); }
+  };
+}
+
+/* ---------- 太空侵略者 ---------- */
+function initInvaders() {
+  var cv = byId('inv-canvas');
+  if (!cv) return null;
+  var W = 160, H = 90;
+  var st = pxStage(cv, W, H);
+  var g = st.g;
+  var scoreEl = byId('inv-score'), lifeEl = byId('inv-life');
+  var startBtn = byId('inv-start'), tip = byId('inv-tip');
+  var best = 0;
+  try { best = Number(localStorage.getItem('liuzhi.inv.v1')) || 0; } catch (e) {}
+
+  var player, shots, ebullets, aliens, running = false, paused = false, raf = 0, last = 0;
+  var score = 0, lives = 3, dir = 1, speed = 12, drop = 0, fireAt = 0, cool = 0;
+  var keys = { left: false, right: false };
+
+  function reset() {
+    player = { x: W / 2 - 5, y: 79, w: 11, h: 5, cool: 0 };
+    shots = [];
+    ebullets = [];
+    aliens = [];
+    for (var r = 0; r < 3; r++) {
+      for (var c = 0; c < 8; c++) {
+        aliens.push({ x: 16 + c * 13, y: 14 + r * 11, w: 7, h: 5, alive: true });
+      }
+    }
+    score = 0;
+    lives = 3;
+    dir = 1;
+    speed = 12;
+    drop = 0;
+    fireAt = 700;
+    scoreEl.textContent = '0';
+    lifeEl.textContent = '3';
+    draw();
+  }
+
+  function drawAlien(a) {
+    pxR(g, a.x + 2, a.y, 3, 2, PX.grn);
+    pxR(g, a.x, a.y + 2, 7, 2, PX.grn);
+    pxR(g, a.x - 1, a.y + 4, 2, 1, PX.grn);
+    pxR(g, a.x + 6, a.y + 4, 2, 1, PX.grn);
+    pxR(g, a.x + 2, a.y + 2, 1, 1, PX.bg);
+    pxR(g, a.x + 4, a.y + 2, 1, 1, PX.bg);
+  }
+
+  function draw() {
+    pxR(g, 0, 0, W, H, PX.bg);
+    for (var s = 0; s < 26; s++) pxR(g, (s * 31 + 5) % W, (s * 19 + 3) % 70, 1, 1, PX.grid);
+    pxR(g, 0, H - 8, W, 1, '#463A66');
+    for (var i = 0; i < aliens.length; i++) if (aliens[i].alive) drawAlien(aliens[i]);
+    for (var j = 0; j < shots.length; j++) pxR(g, shots[j].x, shots[j].y, 1, 4, PX.yel);
+    for (var k = 0; k < ebullets.length; k++) pxR(g, ebullets[k].x, ebullets[k].y, 1, 4, PX.red);
+    pxR(g, player.x, player.y, player.w, player.h, PX.purL);
+    pxR(g, player.x + 2, player.y - 2, 3, 2, PX.purL);
+    pxR(g, player.x + 4, player.y + 1, 3, 1, PX.ink);
+    pxR(g, 0, 0, W, 1, PX.dim);
+    st.show();
+  }
+
+  function fire() {
+    if (!running || player.cool > 0) return;
+    player.cool = 320;
+    shots.push({ x: player.x + 5, y: player.y - 4 });
+  }
+
+  function step(dt) {
+    if (keys.left) player.x -= 46 * dt;
+    if (keys.right) player.x += 46 * dt;
+    player.x = Math.max(2, Math.min(W - player.w - 2, player.x));
+    if (player.cool > 0) player.cool -= dt * 1000;
+
+    for (var i = shots.length - 1; i >= 0; i--) {
+      shots[i].y -= 150 * dt;
+      if (shots[i].y < 4) shots.splice(i, 1);
+    }
+
+    // 外星人行进
+    var edge = false;
+    for (var a = 0; a < aliens.length; a++) {
+      if (!aliens[a].alive) continue;
+      aliens[a].x += dir * speed * dt;
+      if (aliens[a].x < 4 || aliens[a].x > W - 12) edge = true;
+    }
+    if (edge) {
+      dir = -dir;
+      for (var b = 0; b < aliens.length; b++) if (aliens[b].alive) aliens[b].y += 4;
+      drop++;
+      speed = Math.min(34, 12 + drop * 2);
+    }
+
+    // 撞子弹
+    for (var s = shots.length - 1; s >= 0; s--) {
+      for (var t = 0; t < aliens.length; t++) {
+        var al = aliens[t];
+        if (!al.alive) continue;
+        if (shots[s].x > al.x - 1 && shots[s].x < al.x + al.w + 1 &&
+            shots[s].y > al.y - 4 && shots[s].y < al.y + al.h) {
+          al.alive = false;
+          shots.splice(s, 1);
+          score += 10;
+          scoreEl.textContent = String(score);
+          break;
+        }
+      }
+    }
+
+    // 外星人开火
+    fireAt -= dt * 1000;
+    if (fireAt <= 0) {
+      fireAt = 700 + Math.random() * 600;
+      var alive = aliens.filter(function (x) { return x.alive; });
+      if (alive.length) {
+        var pickOne = alive[Math.floor(Math.random() * alive.length)];
+        ebullets.push({ x: pickOne.x + 3, y: pickOne.y + 6 });
+      }
+    }
+    for (var e = ebullets.length - 1; e >= 0; e--) {
+      ebullets[e].y += 55 * dt;
+      if (ebullets[e].y > H) ebullets.splice(e, 1);
+      else if (Math.abs(ebullets[e].x - (player.x + 5)) < 6 &&
+               ebullets[e].y > player.y - 4 && ebullets[e].y < player.y + player.h) {
+        ebullets.splice(e, 1);
+        lives--;
+        lifeEl.textContent = String(Math.max(0, lives));
+        if (lives <= 0) return gameOver();
+      }
+    }
+
+    // 撞到人
+    for (var z = 0; z < aliens.length; z++) {
+      var az = aliens[z];
+      if (!az.alive) continue;
+      if (az.y + az.h > player.y - 2) {
+        lives = 0;
+        return gameOver();
+      }
+    }
+
+    var remain = aliens.some(function (x) { return x.alive; });
+    if (!remain) return gameOver(true);
+
+    draw();
+  }
+
+  function gameOver(win) {
+    running = false;
+    cancelAnimationFrame(raf);
+    startBtn.textContent = '再来一局';
+    if (score > best) {
+      best = score;
+      try { localStorage.setItem('liuzhi.inv.v1', String(best)); } catch (e) {}
+    }
+    tip.textContent = (win ? '全打光了，' : '这局 ') + score + ' 分，最高 ' + best + '。';
+    draw();
+  }
+
+  function loop(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    if (paused) { last = now; return; }
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    step(dt);
+  }
+
+  startBtn.addEventListener('click', function () {
+    reset();
+    startBtn.textContent = '重开';
+    tip.textContent = '← → 移动，射击打外星人，别让它们落地。';
+    running = true;
+    paused = false;
+    last = performance.now();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  });
+
+  window.addEventListener('keydown', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = true;
+    else if (k === 'd' || k === 'arrowright') keys.right = true;
+    else if (k === 'j' || k === ' ') fire();
+    else return;
+    if (running) e.preventDefault();
+  });
+  window.addEventListener('keyup', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = false;
+    else if (k === 'd' || k === 'arrowright') keys.right = false;
+  });
+
+  var pane = byId('pane-invaders');
+  if (pane) {
+    pane.querySelectorAll('.pad button').forEach(function (btn) {
+      var act = btn.dataset.i;
+      function down(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = true;
+        else if (act === 'right') keys.right = true;
+        else if (act === 'fire') fire();
+      }
+      function up(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = false;
+        else if (act === 'right') keys.right = false;
+      }
+      btn.addEventListener('pointerdown', down);
+      btn.addEventListener('pointerup', up);
+      btn.addEventListener('pointercancel', up);
+      btn.addEventListener('pointerleave', up);
+    });
+  }
+
+  reset();
+  return {
+    pause: function () { paused = true; },
+    resume: function () { paused = false; st.fit(); draw(); }
+  };
+}
+
+/* ---------- 切换 ---------- */
+function initGames() {
+  var sw = document.querySelector('.game-switch');
+  if (!sw) return;
+  var games = {
+    snake: initSnake(),
+    kof: initKof(),
+    contra: initContra(),
+    tetris: initTetris(),
+    breakout: initBreakout(),
+    invaders: initInvaders()
+  };
+  function show(key) {
+    Object.keys(games).forEach(function (k) {
+      var pane = byId('pane-' + k);
+      if (pane) pane.hidden = k !== key;
+      if (games[k] && k === key) games[k].resume();
+      else if (games[k]) games[k].pause();
+    });
+  }
+  sw.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-game]');
+    if (!b) return;
+    sw.querySelectorAll('button').forEach(function (x) {
+      var on = x === b;
+      x.classList.toggle('on', on);
+      x.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    show(b.dataset.game);
+  });
+  show('snake');
 }
 
 /* ===== 路由 ===== */
@@ -2212,6 +3916,8 @@ function showView(view){
   document.querySelectorAll('.topnav a').forEach(a => {
     a.classList.toggle('active', a.dataset.nav === view);
   });
+  const sc = byId('snake-canvas');
+  if(sc && sc._resize) setTimeout(sc._resize, 80);
   updateNavPill(true);
 }
 
@@ -2635,7 +4341,7 @@ function init(){
   initArmOpen();
   initNavPill();
   initGlassSpot();
-  initGame();
+  initGames();
   window.addEventListener('hashchange', onRoute);
   onRoute();
 }
