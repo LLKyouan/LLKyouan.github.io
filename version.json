@@ -1,1 +1,6 @@
-{"url":"https://llkyouan.github.io/youan-links.apk","versionCode":41,"versionName":"4.1","notes":"联网更新正式跑通：启动自己问服务器要版本，下载完直接拉起系统安装界面。"}
+{
+ "versionCode": 42,
+ "versionName": "4.2",
+ "notes": "链接改成站内直接打开，站外跳转会被拦下；启动自己问版本、有新版直接下载弹安装。",
+ "url": "https://llkyouan.github.io/youan-links.apk"
+}
