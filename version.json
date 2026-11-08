@@ -1,1 +1,6 @@
-{"versionCode":46,"versionName":"4.6","notes":"动效改成和网页同一套：横幅上细线自己长出来、信号点沿走线跑，光带定时扫过，头像外圈会呼吸，顶部多一条滚动进度线，列表条目滚到才依次落位。图标换回原来那版。","url":"https://llkyouan.github.io/youan-links.apk"}
+{
+"versionCode": 51,
+"versionName": "4.11",
+"notes": "首页加了累计安装人数卡和视频与直播三站（哔哩哔哩、抖音、快手网页版）；关于页改成 By.LLK；链接要点两下才打开，第一下只放动画；交互动画更快，还加了四个很轻的音效，关于页可开关。",
+"url": "https://llkyouan.github.io/youan-links.apk"
+}
