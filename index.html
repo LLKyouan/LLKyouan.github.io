@@ -1348,7 +1348,7 @@ main{padding:0 24px}
 /* ===== 像素街机：覆盖 ===== */
 .game-switch{flex-wrap:wrap;gap:4px;width:max-content;max-width:100%;padding:5px;border-radius:14px}
 .game-switch button{font-size:12px;padding:7px 11px;border-radius:9px}
-@media (max-width:560px){.game-switch{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.game-switch button{width:100%;padding:8px 4px}}
+@media (max-width:560px){.game-switch{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.game-switch button{width:100%;padding:8px 2px;font-size:11.5px}}
 .stage{position:relative;background:#151122;border-radius:12px;padding:6px;
   box-shadow:inset 0 0 0 1px #0E0A18,0 12px 24px -22px rgba(42,33,48,.85)}
 .stage canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:-moz-crisp-edges}
@@ -1444,7 +1444,7 @@ main{padding:0 24px}
       <!-- ===== 视图：小游戏 ===== -->
       <section class="view" id="view-game" hidden>
         <h2 class="page-title">小游戏</h2>
-        <p class="page-sub">六个红白机时代的老玩法，像素画面，等清单更新的间隙解个闷。</p>
+        <p class="page-sub">七个像素小游戏，从红白机玩到推塔，等清单更新的间隙解个闷。</p>
 
         <div class="game-switch" role="tablist" aria-label="选一个小游戏">
           <button type="button" class="on" data-game="snake" role="tab" aria-selected="true">贪吃蛇</button>
@@ -1453,6 +1453,7 @@ main{padding:0 24px}
           <button type="button" data-game="tetris" role="tab" aria-selected="false">俄罗斯方块</button>
           <button type="button" data-game="breakout" role="tab" aria-selected="false">打砖块</button>
           <button type="button" data-game="invaders" role="tab" aria-selected="false">太空侵略者</button>
+          <button type="button" data-game="moba" role="tab" aria-selected="false">MOBA</button>
         </div>
 
         <div class="snake game-pane" id="pane-snake">
@@ -1562,6 +1563,25 @@ main{padding:0 24px}
             <button type="button" data-i="fire" class="wide">射击</button>
           </div>
           <p class="snake-tip" id="inv-tip">← → 移动，射击打外星人，别让它们落地。</p>
+        </div>
+
+        <div class="snake game-pane" id="pane-moba" hidden>
+          <div class="snake-bar">
+            <span>击杀 <b id="moba-kill">0</b></span>
+            <span>对面水晶 <b id="moba-cry">100%</b></span>
+            <button class="snake-start" id="moba-start" type="button">开始</button>
+          </div>
+
+          <div class="stage"><canvas id="moba-canvas" width="400" height="224"></canvas></div>
+          <div class="pad">
+            <button type="button" data-m="left" aria-label="左">←</button>
+            <button type="button" data-m="right" aria-label="右">→</button>
+            <button type="button" data-m="up" aria-label="上">↑</button>
+            <button type="button" data-m="down" aria-label="下">↓</button>
+            <button type="button" data-m="atk">攻击</button>
+            <button type="button" data-m="skill">技能</button>
+          </div>
+          <p class="snake-tip" id="moba-tip">一条路的推塔：带小兵往前走，打掉对面两座塔，最后拆水晶就赢。</p>
         </div>
       </section>
 
@@ -3864,6 +3884,454 @@ function initInvaders() {
   };
 }
 
+/* ---------- 推塔（MOBA） ---------- */
+function initMoba() {
+  var cv = byId('moba-canvas');
+  if (!cv) return null;
+  var W = 200, H = 112;
+  var st = pxStage(cv, W, H);
+  var g = st.g;
+  var killEl = byId('moba-kill'), cryEl = byId('moba-cry');
+  var startBtn = byId('moba-start'), tip = byId('moba-tip');
+  var BEST = 'liuzhi.moba.v1';
+  var best = 0;
+  try { best = Number(localStorage.getItem(BEST)) || 0; } catch (e) {}
+
+  var LANE_T = 24, LANE_B = 86;
+  var hero, ehero, allyBase, enemyBase, allyTower, enemyTower;
+  var mins = [], bullets = [], hits = [], rings = [];
+  var running = false, paused = false, raf = 0, last = 0, waveT = 3, kills = 0;
+  var keys = { left: false, right: false, up: false, down: false };
+
+  function cx(o) { return o.x + o.w / 2; }
+  function cy(o) { return o.y + o.h / 2; }
+  function dist(a, b) {
+    var dx = cx(a) - cx(b), dy = cy(a) - cy(b);
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  function mkBase(team, x) {
+    return { kind: 'base', team: team, x: x, y: 34, w: 10, h: 30, hp: 220, max: 220 };
+  }
+
+  // team 的敌人
+  function targetsOf(team) {
+    var arr = [];
+    var i;
+    if (team === 0) {
+      if (enemyTower.hp > 0) arr.push(enemyTower);
+      if (enemyBase.hp > 0) arr.push(enemyBase);
+      if (!ehero.dead) arr.push(ehero);
+      for (i = 0; i < mins.length; i++) if (mins[i].team === 1) arr.push(mins[i]);
+    } else {
+      if (allyTower.hp > 0) arr.push(allyTower);
+      if (allyBase.hp > 0) arr.push(allyBase);
+      if (!hero.dead) arr.push(hero);
+      for (i = 0; i < mins.length; i++) if (mins[i].team === 0) arr.push(mins[i]);
+    }
+    return arr;
+  }
+
+  function nearest(from, arr, maxR) {
+    var bestOne = null, bd = maxR;
+    for (var i = 0; i < arr.length; i++) {
+      var o = arr[i];
+      if (o.hp <= 0) continue;
+      var d = dist(from, o);
+      if (d < bd) { bd = d; bestOne = o; }
+    }
+    return bestOne;
+  }
+
+  function addKill(n) {
+    kills += n;
+    killEl.textContent = String(kills);
+  }
+
+  function removeMinion(m) {
+    var i = mins.indexOf(m);
+    if (i >= 0) mins.splice(i, 1);
+  }
+
+  function damage(t, amt, byTeam) {
+    if (!t || t.hp <= 0) return;
+    if (t.kind === 'hero' && t.dead) return;
+    t.hp -= amt;
+    if (t.kind === 'minion' && t.hp <= 0) {
+      removeMinion(t);
+      if (byTeam === 0) addKill(10);
+      return;
+    }
+    if (t.kind === 'hero' && t.hp <= 0) {
+      t.hp = 0;
+      t.dead = 4;
+      if (byTeam === 0) addKill(50);
+      return;
+    }
+    if (t.kind === 'tower' && t.hp <= 0) {
+      if (byTeam === 0) addKill(100);
+      return;
+    }
+    if (t.kind === 'base' && t === enemyBase) {
+      cryEl.textContent = Math.max(0, Math.round(t.hp / t.max * 100)) + '%';
+    }
+  }
+
+  function reset() {
+    allyBase = mkBase(0, 4);
+    enemyBase = mkBase(1, W - 14);
+    allyTower = { kind: 'tower', team: 0, x: 44, y: 40, w: 7, h: 22, hp: 90, max: 90, cool: 1200 };
+    enemyTower = { kind: 'tower', team: 1, x: W - 51, y: 40, w: 7, h: 22, hp: 90, max: 90, cool: 1200 };
+    hero = { kind: 'hero', team: 0, x: 20, y: 52, w: 8, h: 11, hp: 100, max: 100, cool: 0, sk: 0, dead: 0 };
+    ehero = { kind: 'hero', team: 1, x: W - 30, y: 52, w: 8, h: 11, hp: 100, max: 100, cool: 0, sk: 0, dead: 0 };
+    mins = []; bullets = []; hits = []; rings = [];
+    kills = 0; waveT = 3;
+    killEl.textContent = '0';
+    cryEl.textContent = '100%';
+    draw();
+  }
+
+  function minion(team, x, y) {
+    return { kind: 'minion', team: team, x: x, y: y, w: 4, h: 6, hp: 20, max: 20, cool: 0 };
+  }
+
+  function countOf(team) {
+    var n = 0;
+    for (var i = 0; i < mins.length; i++) if (mins[i].team === team) n++;
+    return n;
+  }
+
+  function spawnWave() {
+    var ys = [40, 56, 72];
+    for (var i = 0; i < 3; i++) {
+      if (countOf(0) < 9) mins.push(minion(0, 16, ys[i]));
+      if (countOf(1) < 9) mins.push(minion(1, W - 22, ys[i]));
+    }
+  }
+
+  function clampUnit(u) {
+    u.x = Math.max(8, Math.min(W - 8 - u.w, u.x));
+    u.y = Math.max(LANE_T - 2, Math.min(LANE_B - u.h, u.y));
+  }
+
+  function heroAttack() {
+    if (!running || hero.dead || hero.cool > 0) return;
+    hero.cool = 420;
+    var tg = nearest(hero, targetsOf(0), 20);
+    if (!tg) {
+      hits.push({ x: cx(hero), y: cy(hero), tx: cx(hero) + 8, ty: cy(hero), t: 140 });
+      return;
+    }
+    damage(tg, 18, 0);
+    hits.push({ x: cx(hero), y: cy(hero), tx: cx(tg), ty: cy(tg), t: 160 });
+  }
+
+  function heroSkill() {
+    if (!running || hero.dead || hero.sk > 0) return;
+    hero.sk = 5200;
+    rings.push({ x: cx(hero), y: cy(hero), t: 360 });
+    var arr = targetsOf(0);
+    for (var i = 0; i < arr.length; i++) {
+      if (dist(hero, arr[i]) < 28) damage(arr[i], 26, 0);
+    }
+  }
+
+  function aiStep(dt) {
+    if (ehero.dead) {
+      ehero.dead -= dt;
+      if (ehero.dead <= 0) { ehero.hp = ehero.max; ehero.x = W - 34; ehero.y = 52; ehero.cool = 600; }
+      return;
+    }
+    if (ehero.cool > 0) ehero.cool -= dt * 1000;
+    var tg = nearest(ehero, targetsOf(1), 70);
+    if (tg && dist(ehero, tg) < 13) {
+      if (ehero.cool <= 0) {
+        ehero.cool = 950;
+        damage(tg, 9, 1);
+        hits.push({ x: cx(ehero), y: cy(ehero), tx: cx(tg), ty: cy(tg), t: 150 });
+      }
+    } else {
+      var tx = tg ? cx(tg) : 30, ty = tg ? cy(tg) : 56;
+      var dx = tx - cx(ehero), dy = ty - cy(ehero);
+      var d = Math.sqrt(dx * dx + dy * dy) || 1;
+      ehero.x += dx / d * 18 * dt;
+      ehero.y += dy / d * 18 * dt;
+    }
+    clampUnit(ehero);
+  }
+
+  function minionStep(dt) {
+    for (var i = mins.length - 1; i >= 0; i--) {
+      var m = mins[i];
+      if (!m) continue;
+      if (m.cool > 0) m.cool -= dt * 1000;
+      var tg = nearest(m, targetsOf(m.team), 26);
+      if (tg && dist(m, tg) < 7.5) {
+        if (m.cool <= 0) {
+          m.cool = 1000;
+          damage(tg, 4, m.team);
+          hits.push({ x: cx(m), y: cy(m), tx: cx(tg), ty: cy(tg), t: 120 });
+        }
+      } else {
+        var dir = m.team === 0 ? 1 : -1;
+        m.x += dir * 13 * dt;
+        var ty = tg ? cy(tg) : cy(m);
+        if (Math.abs(cy(m) - ty) > 2) m.y += (cy(m) < ty ? 1 : -1) * 9 * dt;
+        clampUnit(m);
+      }
+    }
+  }
+
+  function towerStep(tw, dt) {
+    if (tw.hp <= 0) return;
+    if (tw.cool > 0) tw.cool -= dt * 1000;
+    if (tw.cool > 0) return;
+    var tg = nearest(tw, targetsOf(tw.team), 60);
+    if (!tg) return;
+    tw.cool = 1450;
+    var dx = cx(tg) - cx(tw), dy = cy(tg) - cy(tw);
+    var d = Math.sqrt(dx * dx + dy * dy) || 1;
+    bullets.push({ x: cx(tw), y: tw.y - 2, vx: dx / d * 160, vy: dy / d * 160, team: tw.team, dmg: 13, life: 2.2 });
+  }
+
+  function bulletStep(dt) {
+    for (var i = bullets.length - 1; i >= 0; i--) {
+      var b = bullets[i];
+      b.x += b.vx * dt;
+      b.y += b.vy * dt;
+      b.life -= dt;
+      if (b.life <= 0 || b.x < -4 || b.x > W + 4 || b.y < -4 || b.y > H + 4) { bullets.splice(i, 1); continue; }
+      var arr = targetsOf(b.team);
+      var hit = false;
+      for (var j = 0; j < arr.length; j++) {
+        var o = arr[j];
+        if (o.hp <= 0 || (o.kind === 'hero' && o.dead)) continue;
+        if (Math.abs(b.x - cx(o)) < o.w / 2 + 2 && Math.abs(b.y - cy(o)) < o.h / 2 + 2) {
+          damage(o, b.dmg, b.team);
+          hit = true;
+          break;
+        }
+      }
+      if (hit) bullets.splice(i, 1);
+    }
+  }
+
+  function drawBase(b, mid, light) {
+    pxR(g, b.x, b.y + 2, b.w, 3, '#2A2340');
+    pxR(g, b.x + 1, b.y + 5, b.w - 2, b.h - 8, '#332B4E');
+    var c = cx(b);
+    for (var r = 0; r < 10; r++) {
+      var hw = (r < 5 ? r + 1 : 10 - r) + 1;
+      pxR(g, c - hw, b.y + 9 + r, hw * 2, 1, r < 5 ? light : mid);
+    }
+    if (b.hp < b.max) {
+      var bw = Math.max(0, Math.round((b.w + 2) * b.hp / b.max));
+      pxR(g, b.x - 1, b.y - 3, b.w + 2, 2, '#0E0A18');
+      pxR(g, b.x - 1, b.y - 3, bw, 2, b.team === 0 ? PX.grn : PX.yel);
+    }
+  }
+
+  function drawTower(t) {
+    if (t.hp <= 0) {
+      pxR(g, t.x, t.y + 16, t.w, 6, '#2A2340');
+      return;
+    }
+    pxR(g, t.x, t.y, t.w, t.h, t.team === 0 ? '#5A3E78' : '#7C3B44');
+    pxR(g, t.x + 1, t.y - 3, t.w - 2, 4, t.team === 0 ? PX.purL : PX.red);
+    pxR(g, t.x + 2, t.y + 6, t.w - 4, 1, '#0E0A18');
+    var bw = Math.max(0, Math.round((t.w + 2) * t.hp / t.max));
+    pxR(g, t.x - 1, t.y - 6, t.w + 2, 2, '#0E0A18');
+    pxR(g, t.x - 1, t.y - 6, bw, 2, t.team === 0 ? PX.grn : PX.yel);
+  }
+
+  function drawHero(h, ally) {
+    if (h.dead) return;
+    var body = ally ? PX.purL : PX.red;
+    pxR(g, h.x, h.y + 3, h.w, h.h - 3, body);
+    pxR(g, h.x + 2, h.y - 1, 4, 4, PX.ink);
+    pxR(g, h.x + 3, h.y, 1, 1, PX.bg);
+    pxR(g, ally ? h.x + h.w : h.x - 2, h.y + 4, 2, 5, PX.yel);
+    var bw = Math.max(0, Math.round(16 * h.hp / h.max));
+    pxR(g, h.x - 4, h.y - 5, 16, 2, '#0E0A18');
+    pxR(g, h.x - 4, h.y - 5, bw, 2, ally ? PX.grn : PX.yel);
+  }
+
+  function draw() {
+    pxR(g, 0, 0, W, H, PX.bg);
+    pxR(g, 4, LANE_T, W - 8, LANE_B - LANE_T, PX.bg2);
+    for (var fy = LANE_T; fy < LANE_B; fy += 8) {
+      for (var fx = 4 + (((fy - LANE_T) / 8) % 2) * 8; fx < W - 4; fx += 16) pxR(g, fx, fy, 7, 1, '#221C36');
+    }
+    for (var x = 8; x < W - 8; x += 9) pxR(g, x, 54, 3, 1, PX.grid);
+    for (var y = LANE_T + 6; y < LANE_B; y += 9) pxR(g, 8, y, W - 16, 1, PX.grid);
+    pxR(g, 4, LANE_T, W - 8, 1, '#332B4E');
+    pxR(g, 4, LANE_B - 1, W - 8, 1, '#332B4E');
+
+    drawBase(allyBase, PX.pur, PX.purL);
+    drawBase(enemyBase, PX.red, '#F0939A');
+    drawTower(allyTower);
+    drawTower(enemyTower);
+
+    for (var i = 0; i < mins.length; i++) {
+      var m = mins[i];
+      pxR(g, m.x, m.y, m.w, m.h, m.team === 0 ? PX.purL : PX.red);
+      pxR(g, m.x + 1, m.y + 1, 2, 1, PX.bg);
+      if (m.hp < m.max) {
+        pxR(g, m.x - 1, m.y - 2, m.w + 2, 1, '#0E0A18');
+        pxR(g, m.x - 1, m.y - 2, Math.max(1, Math.round((m.w + 2) * m.hp / m.max)), 1, PX.yel);
+      }
+    }
+
+    drawHero(hero, true);
+    drawHero(ehero, false);
+
+    for (var b = 0; b < bullets.length; b++) {
+      pxR(g, bullets[b].x - 1, bullets[b].y - 1, 2, 2, bullets[b].team === 0 ? PX.yel : PX.pink);
+    }
+
+    for (var hh = 0; hh < hits.length; hh++) {
+      var f = hits[hh];
+      g.strokeStyle = PX.ink;
+      g.lineWidth = 1;
+      g.beginPath();
+      g.moveTo(Math.round(f.x), Math.round(f.y));
+      g.lineTo(Math.round(f.tx), Math.round(f.ty));
+      g.stroke();
+    }
+
+    for (var r = 0; r < rings.length; r++) {
+      var rg = rings[r];
+      g.strokeStyle = PX.purL;
+      g.lineWidth = 1;
+      g.beginPath();
+      g.arc(Math.round(rg.x), Math.round(rg.y), 20, 0, Math.PI * 2);
+      g.stroke();
+    }
+
+    pxR(g, 0, 0, W, 1, PX.dim);
+    st.show();
+  }
+
+  function step(dt) {
+    waveT -= dt;
+    if (waveT <= 0) {
+      waveT = 9;
+      spawnWave();
+    }
+
+    if (hero.dead) {
+      hero.dead -= dt;
+      if (hero.dead <= 0) { hero.hp = hero.max; hero.x = 20; hero.y = 52; hero.cool = 400; }
+    } else {
+      var sp = 20;
+      if (keys.left) hero.x -= sp * dt;
+      if (keys.right) hero.x += sp * dt;
+      if (keys.up) hero.y -= sp * dt;
+      if (keys.down) hero.y += sp * dt;
+      clampUnit(hero);
+      if (hero.cool > 0) hero.cool -= dt * 1000;
+      if (hero.sk > 0) hero.sk -= dt * 1000;
+    }
+
+    aiStep(dt);
+    minionStep(dt);
+    towerStep(allyTower, dt);
+    towerStep(enemyTower, dt);
+    bulletStep(dt);
+
+    for (var i = hits.length - 1; i >= 0; i--) { hits[i].t -= dt * 1000; if (hits[i].t <= 0) hits.splice(i, 1); }
+    for (var j = rings.length - 1; j >= 0; j--) { rings[j].t -= dt * 1000; if (rings[j].t <= 0) rings.splice(j, 1); }
+
+    if (enemyBase.hp <= 0) return finish(true);
+    if (allyBase.hp <= 0) return finish(false);
+    draw();
+  }
+
+  function finish(win) {
+    running = false;
+    cancelAnimationFrame(raf);
+    startBtn.textContent = '再来一局';
+    if (kills > best) {
+      best = kills;
+      try { localStorage.setItem(BEST, String(best)); } catch (e) {}
+    }
+    tip.textContent = (win ? '水晶推掉了' : '自家水晶没了') + '，击杀 ' + kills + ' 个，最高 ' + best + '。';
+    draw();
+  }
+
+  function loop(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    if (paused) { last = now; return; }
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    step(dt);
+  }
+
+  startBtn.addEventListener('click', function () {
+    reset();
+    startBtn.textContent = '重开';
+    tip.textContent = '一条路的推塔：带小兵往前走，打掉对面两座塔，最后拆水晶就赢。';
+    running = true;
+    paused = false;
+    last = performance.now();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  });
+
+  window.addEventListener('keydown', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = true;
+    else if (k === 'd' || k === 'arrowright') keys.right = true;
+    else if (k === 'w' || k === 'arrowup') keys.up = true;
+    else if (k === 's' || k === 'arrowdown') keys.down = true;
+    else if (k === 'j') heroAttack();
+    else if (k === 'k') heroSkill();
+    else return;
+    if (running) e.preventDefault();
+  });
+  window.addEventListener('keyup', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'a' || k === 'arrowleft') keys.left = false;
+    else if (k === 'd' || k === 'arrowright') keys.right = false;
+    else if (k === 'w' || k === 'arrowup') keys.up = false;
+    else if (k === 's' || k === 'arrowdown') keys.down = false;
+  });
+
+  var pane = byId('pane-moba');
+  if (pane) {
+    pane.querySelectorAll('.pad button').forEach(function (btn) {
+      var act = btn.dataset.m;
+      function down(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = true;
+        else if (act === 'right') keys.right = true;
+        else if (act === 'up') keys.up = true;
+        else if (act === 'down') keys.down = true;
+        else if (act === 'atk') heroAttack();
+        else if (act === 'skill') heroSkill();
+      }
+      function up(ev) {
+        ev.preventDefault();
+        if (act === 'left') keys.left = false;
+        else if (act === 'right') keys.right = false;
+        else if (act === 'up') keys.up = false;
+        else if (act === 'down') keys.down = false;
+      }
+      btn.addEventListener('pointerdown', down);
+      btn.addEventListener('pointerup', up);
+      btn.addEventListener('pointercancel', up);
+      btn.addEventListener('pointerleave', up);
+    });
+  }
+
+  reset();
+  return {
+    pause: function () { paused = true; },
+    resume: function () { paused = false; st.fit(); draw(); }
+  };
+}
+
 /* ---------- 切换 ---------- */
 function initGames() {
   var sw = document.querySelector('.game-switch');
@@ -3874,7 +4342,8 @@ function initGames() {
     contra: initContra(),
     tetris: initTetris(),
     breakout: initBreakout(),
-    invaders: initInvaders()
+    invaders: initInvaders(),
+    moba: initMoba()
   };
   function show(key) {
     Object.keys(games).forEach(function (k) {
