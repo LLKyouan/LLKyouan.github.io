@@ -1,6 +1,1 @@
-{
- "versionCode": 45,
- "versionName": "4.5",
- "notes": "换了一枚新图标：深紫底、白色衬线「幼」和一道细印章边框。版本行照旧标出安装包大小与更新日期。",
- "url": "https://llkyouan.github.io/youan-links.apk"
-}
+{"versionCode":46,"versionName":"4.6","notes":"动效改成和网页同一套：横幅上细线自己长出来、信号点沿走线跑，光带定时扫过，头像外圈会呼吸，顶部多一条滚动进度线，列表条目滚到才依次落位。图标换回原来那版。","url":"https://llkyouan.github.io/youan-links.apk"}
