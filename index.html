@@ -1124,16 +1124,47 @@ main{padding:0 24px}
 }
 .page-title.st.in,.page-sub.st.in,.section-head.st.in{filter:blur(0)}
 
-/* 视图切换：按导航顺序左右推进，像系统里的前进／后退 */
+/* 视图切换：旧页先失焦退后，新页带着景深和方向推进来，元素再各自补位 */
+:root{
+  --vt-out:.42s;
+  --vt-in:.66s;
+  --vt-ease:cubic-bezier(.4,0,.2,1);
+}
 @supports (view-transition-name:none){
-  html[data-vt="fwd"] ::view-transition-old(page){animation:vtOutF .36s cubic-bezier(.4,0,.2,1) both}
-  html[data-vt="fwd"] ::view-transition-new(page){animation:vtInF .54s var(--spring-soft) both}
-  html[data-vt="back"] ::view-transition-old(page){animation:vtOutB .36s cubic-bezier(.4,0,.2,1) both}
-  html[data-vt="back"] ::view-transition-new(page){animation:vtInB .54s var(--spring-soft) both}
-  @keyframes vtOutF{from{opacity:1;transform:none}to{opacity:0;transform:translate3d(-22px,0,0) scale(.988)}}
-  @keyframes vtInF{from{opacity:0;transform:translate3d(26px,0,0) scale(.988)}to{opacity:1;transform:none}}
-  @keyframes vtOutB{from{opacity:1;transform:none}to{opacity:0;transform:translate3d(22px,0,0) scale(.988)}}
-  @keyframes vtInB{from{opacity:0;transform:translate3d(-26px,0,0) scale(.988)}to{opacity:1;transform:none}}
+  html[data-vt="fwd"] ::view-transition-old(page){animation:vtOutF var(--vt-out) var(--vt-ease) both}
+  html[data-vt="fwd"] ::view-transition-new(page){animation:vtInF var(--vt-in) var(--spring-soft) .05s both}
+  html[data-vt="back"] ::view-transition-old(page){animation:vtOutB var(--vt-out) var(--vt-ease) both}
+  html[data-vt="back"] ::view-transition-new(page){animation:vtInB var(--vt-in) var(--spring-soft) .05s both}
+  html[data-vt] ::view-transition-group(page){animation-duration:var(--vt-in)}
+  @keyframes vtOutF{
+    from{opacity:1;filter:blur(0) brightness(1);transform:none}
+    to{opacity:.18;filter:blur(9px) brightness(1.04);transform:translate3d(-30px,-8px,0) scale(.982)}
+  }
+  @keyframes vtInF{
+    from{opacity:0;filter:blur(10px) brightness(1.06);transform:translate3d(42px,14px,0) scale(.968)}
+    62%{opacity:1;filter:blur(0) brightness(1)}
+    to{opacity:1;filter:blur(0) brightness(1);transform:none}
+  }
+  @keyframes vtOutB{
+    from{opacity:1;filter:blur(0) brightness(1);transform:none}
+    to{opacity:.18;filter:blur(9px) brightness(1.04);transform:translate3d(30px,-8px,0) scale(.982)}
+  }
+  @keyframes vtInB{
+    from{opacity:0;filter:blur(10px) brightness(1.06);transform:translate3d(-42px,14px,0) scale(.968)}
+    62%{opacity:1;filter:blur(0) brightness(1)}
+    to{opacity:1;filter:blur(0) brightness(1);transform:none}
+  }
+  /* 方向一致的第二层：视图里的元素从同一侧稍晚补位，页面像有厚度 */
+  html[data-vt="fwd"] .st{transform:translate3d(18px,18px,0)}
+  html[data-vt="back"] .st{transform:translate3d(-18px,18px,0)}
+  html[data-vt="fwd"] .st.in,html[data-vt="back"] .st.in{transform:none}
+  html[data-vt="fwd"] .page-title.st,html[data-vt="back"] .page-title.st{filter:blur(6px)}
+  html[data-vt="fwd"] .page-title.st.in,html[data-vt="back"] .page-title.st.in{filter:blur(0)}
+  /* 换页时导航胶囊比页面慢半拍落位，形成先后 */
+  .topnav a.active{transition-duration:.42s}
+}
+@media (prefers-reduced-motion:reduce){
+  html[data-vt="fwd"] .st,html[data-vt="back"] .st{transform:none;filter:none}
 }
 
 /* 玻璃追光：指针划过面板，一小团高光跟着走 */
@@ -1724,7 +1755,7 @@ main{padding:0 24px}
 <footer class="foot">
   <div class="foot-inner">
     <span id="foot-count"></span>
-    <span><b class="ver">V3.4</b> · 手动更新 · 收藏存在这台设备的浏览器里</span>
+    <span><b class="ver">V3.5</b> · 手动更新 · 收藏存在这台设备的浏览器里</span>
   </div>
 </footer>
 
