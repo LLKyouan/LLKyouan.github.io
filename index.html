@@ -878,6 +878,235 @@ main{padding:0 24px}
   .chips{gap:8px 8px}
   .section-head .meta{font-size:12px}
 }
+
+/* ===== 仿苹果：通透玻璃、发丝边、弹性动效 ===== */
+/* 苹果的玻璃不是"磨砂纸"，是能看到后面颜色的通透膜：模糊更深、饱和度更高、边只有半像素 */
+:root{
+  --glass:rgba(255,255,255,.52);
+  --glass-line:rgba(255,255,255,.6);
+  --glass-edge:rgba(42,33,48,.055);
+  --glass-blur:blur(34px) saturate(190%) brightness(1.03);
+  --glass-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    inset 0 0 0 .5px rgba(255,255,255,.55),
+    0 0 0 .5px rgba(42,33,48,.05),
+    0 26px 56px -34px rgba(42,33,48,.5);
+  --ease-ios:cubic-bezier(.25,.1,.25,1);
+  --spring:cubic-bezier(.34,1.22,.36,1);
+  --r-md:16px;
+  --r-lg:24px;
+  --r-xl:32px;
+}
+
+/* 纸底下铺一层更大的环境色，玻璃才有真正可透的东西 */
+.glow{
+  background:
+    radial-gradient(48% 36% at 8% -6%,rgba(179,136,212,.46),rgba(179,136,212,0) 70%),
+    radial-gradient(42% 32% at 96% 4%,rgba(232,160,200,.40),rgba(232,160,200,0) 72%),
+    radial-gradient(58% 46% at 88% 104%,rgba(124,158,222,.22),rgba(124,158,222,0) 74%),
+    radial-gradient(52% 44% at 12% 98%,rgba(155,89,182,.30),rgba(155,89,182,0) 76%),
+    linear-gradient(180deg,#FDFCFF 0%,#F6F1FB 48%,#FDFBFF 100%);
+}
+.glow::after{
+  inset:-20% -14%;
+  background:
+    radial-gradient(34% 28% at 14% 18%,rgba(179,136,212,.32),rgba(179,136,212,0) 72%),
+    radial-gradient(28% 24% at 88% 30%,rgba(232,160,200,.28),rgba(232,160,200,0) 74%);
+  animation-duration:34s;
+}
+
+/* 面板：一块通透的玻璃层，四周只有一圈发丝亮边，影子铺得很开、很淡 */
+.dock,.list,.group,#saved-list,#home-cats,.form,.drafts-wrap{
+  background:linear-gradient(162deg,rgba(255,255,255,.64),rgba(255,255,255,.42));
+  -webkit-backdrop-filter:var(--glass-blur);
+  backdrop-filter:var(--glass-blur);
+  border:1px solid var(--glass-line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--glass-shadow);
+}
+.row,.cat-row,.draft,.empty{border-bottom-color:var(--glass-edge)}
+.group-head{border-bottom-color:var(--glass-edge)}
+
+/* 列表行的悬停／按住：像 iOS 那样整行铺一层薄膜，不描边、不换色 */
+.row,.cat-row{
+  background-image:linear-gradient(rgba(255,255,255,.66),rgba(255,255,255,.66));
+  transition:background-size .38s var(--ease-ios);
+}
+@media (hover:none){
+  .row:active,.cat-row:active{background-size:100% 100%}
+}
+
+/* 顶部导航：iOS 那种贴顶的半透明条，选中项落成一枚胶囊 */
+.topnav{
+  padding:8px 16px;
+  gap:6px;
+  background:rgba(250,247,253,.62);
+  border:0;
+  border-bottom:1px solid rgba(42,33,48,.07);
+  -webkit-backdrop-filter:blur(30px) saturate(190%);
+  backdrop-filter:blur(30px) saturate(190%);
+  box-shadow:none;
+  transition:background-color .4s var(--ease-ios),box-shadow .4s var(--ease-ios);
+}
+.topnav.lift{
+  background:rgba(250,247,253,.76);
+  box-shadow:0 18px 40px -32px rgba(42,33,48,.5);
+}
+.topnav a{
+  padding:7px 15px;border-radius:var(--r-pill);
+  font-size:13.5px;color:var(--ink-soft);
+  transition:background-color .3s var(--ease-ios),color .3s var(--ease-ios),transform .36s var(--spring);
+}
+.topnav a::after{display:none}
+.topnav a:hover{color:var(--ink);background:rgba(255,255,255,.6)}
+.topnav a.active{
+  color:var(--ink);font-weight:500;
+  background:rgba(155,89,182,.14);
+  box-shadow:inset 0 0 0 .5px rgba(155,89,182,.22),inset 0 1px 0 rgba(255,255,255,.7);
+}
+.topnav a:active{transform:scale(.96)}
+
+/* 筛选胶囊：iOS 的分段控件质感，选中是一层淡紫膜 */
+.chip{
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:var(--r-pill);
+  color:var(--ink-soft);
+  -webkit-backdrop-filter:blur(18px) saturate(185%);
+  backdrop-filter:blur(18px) saturate(185%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 .5px rgba(42,33,48,.045),0 10px 22px -18px rgba(42,33,48,.4);
+  transition:background-color .3s var(--ease-ios),border-color .3s var(--ease-ios),color .3s var(--ease-ios),transform .38s var(--spring),box-shadow .38s var(--ease-ios);
+}
+.chip:hover{background:rgba(255,255,255,.78);border-color:rgba(155,89,182,.22);color:var(--ink)}
+.chip.on{
+  background:rgba(155,89,182,.2);
+  border-color:rgba(155,89,182,.26);
+  color:var(--ink);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 10px 22px -18px rgba(155,89,182,.6);
+}
+.chip:active{transform:scale(.95)}
+
+/* 搜索框：UISearchBar 那种填充胶囊 */
+.search-row{
+  background:rgba(255,255,255,.62);
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:14px;
+  padding:6px 14px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 0 0 .5px rgba(42,33,48,.05);
+  transition:background-color .32s var(--ease-ios),border-color .32s var(--ease-ios),box-shadow .32s var(--ease-ios);
+}
+.search-row:focus-within{
+  background:rgba(255,255,255,.92);
+  border-color:rgba(155,89,182,.32);
+  box-shadow:0 0 0 3.5px rgba(155,89,182,.12),inset 0 1px 0 rgba(255,255,255,.95);
+}
+
+/* 表单控件：iOS 的圆角填充块 */
+.field input,.field select,.field textarea{
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(255,255,255,.75);
+  border-radius:13px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 .5px rgba(42,33,48,.05);
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  background:#fff;
+  border-color:rgba(155,89,182,.34);
+  box-shadow:0 0 0 3.5px rgba(155,89,182,.12);
+}
+
+/* 主按钮：实心强调色、胶囊、按下去轻微缩，松开带回弹 */
+.submit{
+  background:linear-gradient(180deg,#A968C4,#8C4BA8);
+  border:0;color:#fff;font-weight:500;
+  padding:12px 30px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 14px 30px -18px rgba(93,52,124,.85);
+  transition:transform .4s var(--spring),box-shadow .4s var(--ease-ios),filter .28s var(--ease-ios);
+}
+.submit:hover{background:linear-gradient(180deg,#B072CB,#9351AF);filter:brightness(1.04);transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 18px 34px -18px rgba(93,52,124,.85)}
+.submit:active{background:linear-gradient(180deg,#9153AC,#82459E);transform:scale(.97);filter:brightness(.97)}
+
+/* 星标与箭头：按住缩一下，像系统按钮 */
+.star,.open-btn{border-radius:12px;transition:background-color .28s var(--ease-ios),color .28s var(--ease-ios),transform .34s var(--spring)}
+.star:hover,.open-btn:hover{background-color:rgba(255,255,255,.72)}
+.star:active,.open-btn:active{transform:scale(.9)}
+
+/* 回到顶部：一枚悬浮的圆形玻璃钮 */
+.totop{
+  background:rgba(255,255,255,.55);
+  -webkit-backdrop-filter:blur(26px) saturate(185%);
+  backdrop-filter:blur(26px) saturate(185%);
+  border:1px solid rgba(255,255,255,.68);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 18px 36px -24px rgba(42,33,48,.55);
+  transition:opacity .3s var(--ease-ios),transform .44s var(--spring),box-shadow .4s var(--ease-ios);
+}
+.totop:hover{border-color:rgba(255,255,255,.82);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 22px 40px -24px rgba(42,33,48,.6)}
+
+/* toast：iOS 的悬浮提示条，深色玻璃 */
+.toast{
+  background:rgba(28,22,32,.64);
+  -webkit-backdrop-filter:blur(26px) saturate(180%);
+  backdrop-filter:blur(26px) saturate(180%);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:26px;
+  padding:11px 20px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 22px 44px -24px rgba(0,0,0,.62);
+  transition:opacity .26s var(--ease-ios),transform .42s var(--spring);
+}
+
+/* 页脚：一条更薄的玻璃边 */
+.foot{
+  border-top:1px solid rgba(42,33,48,.07);
+  background:rgba(255,255,255,.42);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(24px) saturate(180%);
+}
+
+/* 横幅：底部圆角放大一档，根上加一条高光边 */
+.hero{
+  border-radius:0 0 var(--r-xl) var(--r-xl);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28);
+}
+.section-head::after{background-color:rgba(42,33,48,.24)}
+.section-head::after{
+  background:linear-gradient(90deg,
+    rgba(42,33,48,.24) 0%,rgba(42,33,48,.24) 32%,
+    rgba(155,89,182,.42) 50%,rgba(42,33,48,.24) 68%,rgba(42,33,48,.24) 100%);
+  background-size:220% 100%;
+}
+
+/* 动效：入场像一张纸被轻轻放下，回弹归位 */
+.dock,.list,.form{animation:sheetIn .72s var(--spring) both}
+@keyframes sheetIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+.st.in{transition:opacity .46s var(--ease-ios),transform .5s var(--spring)}
+
+/* 返回半透明白与不透明背景时的兜底，必须放在最后覆盖 */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .dock,.list,.group,#saved-list,#home-cats,.form,.drafts-wrap{background:rgba(255,255,255,.94)}
+  .topnav,.foot,.totop{background:rgba(255,255,255,.97)}
+  .toast{background:rgba(28,22,32,.92)}
+  .chip{background:rgba(255,255,255,.9)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .dock,.list,.group,#saved-list,#home-cats,.form,.drafts-wrap,
+  .topnav,.foot,.totop,.chip,.search-row,.field input,.field select,.field textarea{
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+  }
+  .dock,.list,.group,#saved-list,#home-cats,.form,.drafts-wrap{background:#fff}
+  .topnav,.foot,.totop{background:#fff}
+  .chip{background:rgba(255,255,255,.92)}
+  .chip.on{background:rgba(155,89,182,.16)}
+}
+
+/* 窄屏：胶囊导航与小屏面板间距 */
+@media (max-width:640px){
+  .topnav{padding:7px 10px;gap:2px}
+  .topnav a{padding:7px 11px;font-size:13px}
+  .dock,.form{padding-left:16px;padding-right:16px}
+  .toast{border-radius:22px}
+}
+@media (max-width:380px){
+  .topnav a{padding:6px 9px;font-size:12.5px}
+}
 </style>
 </head>
 <body>
