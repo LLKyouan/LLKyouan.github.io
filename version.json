@@ -1,6 +1,6 @@
 {
- "versionCode": 43,
- "versionName": "4.3",
- "notes": "站外跳转先问一句，可以在 App 里接着看；返回不再白屏。新版本提示卡换成圆角毛玻璃。",
+ "versionCode": 44,
+ "versionName": "4.4",
+ "notes": "应用改名幼安阁；关于页版本号后面标出安装包大小和更新日期。",
  "url": "https://llkyouan.github.io/youan-links.apk"
 }
