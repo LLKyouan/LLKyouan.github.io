@@ -1,6 +1,1 @@
-{
-"versionCode": 63,
-"versionName": "5.2",
-"notes": "导航里的「关于」改成「设置」；点按音效重新做过，导航栏点了也有声；安装包改由 App 自己下，底部一条卡显示进度和速度，同一版不会再重复下载；首页安装人数卡右侧多了一个刷新圈。",
-"url": "https://llkyouan.github.io/youan-links.apk"
-}
+{"versionCode": 66, "versionName": "5.3", "notes": "所有能点的位置都有声音；四个音效整套重做过，更软更通透；刷新圈换成玻璃小圆钮，点下去泛光再转一圈；顶部导航六项等宽，贴顶是一条完整白栏，窄屏也不挤。", "url": "https://llkyouan.github.io/youan-links.apk"}
