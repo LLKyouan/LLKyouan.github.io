@@ -1203,6 +1203,37 @@ main{padding:0 24px}
   .glass-spot::after{display:none}
   .chip.on{animation:none}
 }
+
+/* ===== 投稿：附一个文件 ===== */
+.file-field{margin-bottom:22px}
+.file-row{display:flex;align-items:center;gap:10px;min-width:0}
+.file-btn{
+  appearance:none;-webkit-appearance:none;flex:none;
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 15px;border-radius:var(--r-pill);cursor:pointer;
+  font-family:inherit;font-size:13px;color:var(--ink);
+  background:rgba(255,255,255,.6);border:.5px solid rgba(255,255,255,.76);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 8px 18px -14px rgba(42,33,48,.55);
+  transition:transform var(--t-fast) var(--ease-out),background-color var(--t-fast) ease;
+  -webkit-tap-highlight-color:transparent;
+}
+@media (hover:hover) and (pointer:fine){.file-btn:hover{background:rgba(255,255,255,.82)}}
+.file-btn:active{transform:scale(.96)}
+.file-btn svg{width:15px;height:15px;stroke:currentColor;flex:none}
+.file-name{flex:1 1 auto;min-width:0;font-size:13px;color:var(--ink-mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-name.on{color:var(--ink-soft)}
+.file-thumb{flex:none;width:42px;height:42px;border-radius:11px;object-fit:cover;
+  border:.5px solid rgba(255,255,255,.8);box-shadow:0 8px 16px -12px rgba(42,33,48,.6)}
+.file-thumb[hidden]{display:none}
+.file-clear{
+  appearance:none;-webkit-appearance:none;flex:none;cursor:pointer;
+  font-family:inherit;font-size:12.5px;color:var(--seal);
+  background:transparent;border:0;padding:4px 2px;
+  -webkit-tap-highlight-color:transparent;
+}
+.file-clear[hidden]{display:none}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.draft em{display:block;margin-top:3px;font-style:normal;color:var(--ink-mute);font-size:12.5px}
 </style>
 </head>
 <body>
@@ -1308,6 +1339,21 @@ main{padding:0 24px}
             <div class="field">
               <label for="f-note">一句说明（可不填）</label>
               <textarea id="f-note" name="note" rows="2" maxlength="80" placeholder="它能解决什么"></textarea>
+            </div>
+            <div class="field file-field">
+              <label for="f-file">附一个文件（可不填）</label>
+              <div class="file-row">
+                <img id="f-file-thumb" class="file-thumb" hidden alt="">
+                <button type="button" class="file-btn" id="f-file-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 16V4M7.5 8.5 12 4l4.5 4.5M4.5 16v3.5h15V16"/>
+                  </svg>
+                  选择文件
+                </button>
+                <span class="file-name" id="f-file-name">图片、PDF、文本都可以，只在这台设备读</span>
+                <input class="visually-hidden" id="f-file" name="file" type="file">
+                <button type="button" class="file-clear" id="f-file-clear" hidden>移除</button>
+              </div>
             </div>
             <p class="form-error" id="form-error" role="alert" aria-live="polite"></p>
             <button class="submit" type="submit">存到待收录</button>
@@ -1840,6 +1886,11 @@ function renderDrafts(){
     const meta = document.createElement('span');
     meta.textContent = (CAT_LABEL[d.cat] || '未分类') + ' · ' + d.host + (d.note ? ' · ' + d.note : '');
     text.append(title, meta);
+    if(d.file){
+      const att = document.createElement('em');
+      att.textContent = '附件：' + d.file + (d.fileSize ? '（' + sizeText(d.fileSize) + '，刷新后不再保留）' : '');
+      text.append(att);
+    }
 
     const del = document.createElement('button');
     del.type = 'button';
@@ -1868,6 +1919,13 @@ function normalizeUrl(raw){
   }catch(err){ return null; }
 }
 
+function sizeText(bytes){
+  if(!bytes || bytes < 0) return '';
+  if(bytes < 1024) return bytes + ' B';
+  if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
 function initForm(){
   const select = byId('f-cat');
   CATS.forEach(c => {
@@ -1875,6 +1933,66 @@ function initForm(){
     opt.value = c.key;
     opt.textContent = c.label;
     select.append(opt);
+  });
+
+  const fileInput = byId('f-file');
+  const fileBtn = byId('f-file-btn');
+  const fileClear = byId('f-file-clear');
+  const fileTag = byId('f-file-name');
+  const fileThumb = byId('f-file-thumb');
+  let pending = null;
+  let thumbUrl = '';
+
+  function paintFile(){
+    if(pending){
+      fileTag.textContent = pending.name + (pending.size ? ' · ' + sizeText(pending.size) : '');
+      fileTag.classList.add('on');
+      fileClear.hidden = false;
+      if(thumbUrl){
+        fileThumb.src = thumbUrl;
+        fileThumb.hidden = false;
+      }
+    }else{
+      fileTag.textContent = '图片、PDF、文本都可以，只在这台设备读';
+      fileTag.classList.remove('on');
+      fileClear.hidden = true;
+      fileThumb.hidden = true;
+      fileThumb.removeAttribute('src');
+    }
+  }
+
+  function clearFile(){
+    if(thumbUrl){
+      URL.revokeObjectURL(thumbUrl);
+      thumbUrl = '';
+    }
+    pending = null;
+    fileInput.value = '';
+    paintFile();
+  }
+
+  fileBtn.addEventListener('click', () => fileInput.click());
+  fileClear.addEventListener('click', () => {
+    clearFile();
+    toast('已移除附件');
+  });
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files && fileInput.files[0];
+    if(!f){ clearFile(); return; }
+    if(f.size > 8 * 1024 * 1024){
+      clearFile();
+      toast('文件超过 8MB，挑个小点的');
+      return;
+    }
+    if(thumbUrl){
+      URL.revokeObjectURL(thumbUrl);
+      thumbUrl = '';
+    }
+    pending = {name: f.name, size: f.size};
+    if(/^image\//.test(f.type || '') || /\.(png|jpe?g|webp|gif)$/i.test(f.name)){
+      thumbUrl = URL.createObjectURL(f);
+    }
+    paintFile();
   });
 
   const form = byId('add-form');
@@ -1908,6 +2026,10 @@ function initForm(){
       cat: cat,
       note: note
     };
+    if(pending){
+      item.file = pending.name;
+      item.fileSize = pending.size;
+    }
 
     drafts = [item].concat(drafts);
     writeStore(STORE.drafts, drafts);
@@ -1921,6 +2043,7 @@ function initForm(){
 
     form.reset();
     select.value = cat;
+    clearFile();
     toast('已存到本机待收录清单');
   });
 }
