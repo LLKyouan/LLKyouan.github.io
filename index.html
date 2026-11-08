@@ -765,33 +765,14 @@ main{padding:0 24px}
 /* 滚动后导航条轻轻抬一层：和内容分开，滚起来也知道页面在动 */
 .topnav.lift{background:rgba(255,255,255,.86);box-shadow:0 14px 32px -28px rgba(42,33,48,.75)}
 
-/* ===== 两下打开：第一下只亮起一块圆角，第二下才真的走 ===== */
-.row{position:relative;isolation:isolate}
-.row::before{
-  content:"";position:absolute;inset:-3px -10px;z-index:-1;pointer-events:none;
-  border-radius:var(--r-md);
-  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(155,89,182,.12));
-  border:1px solid rgba(155,89,182,.30);
-  box-shadow:0 12px 26px -20px rgba(93,52,124,.6),0 1px 0 rgba(255,255,255,.9) inset;
-  opacity:0;transform:scale(.95);
-  transition:opacity .2s ease,transform .34s var(--ease-out);
-}
-.row.armed::before{opacity:1;transform:none;animation:armBreath 1.9s var(--ease-soft) .25s infinite}
-@keyframes armBreath{
-  0%,100%{box-shadow:0 12px 26px -20px rgba(93,52,124,.6),0 0 0 0 rgba(155,89,182,0)}
-  50%{box-shadow:0 14px 30px -18px rgba(93,52,124,.66),0 0 0 7px rgba(155,89,182,.10)}
-}
-.cat-row{position:relative;isolation:isolate}
-.cat-row::before{
-  content:"";position:absolute;inset:-3px -10px;z-index:-1;pointer-events:none;
-  border-radius:var(--r-md);
-  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(155,89,182,.12));
-  border:1px solid rgba(155,89,182,.30);
-  box-shadow:0 12px 26px -20px rgba(93,52,124,.6);
-  opacity:0;transform:scale(.95);
-  transition:opacity .2s ease,transform .34s var(--ease-out);
-}
-.cat-row.armed::before{opacity:1;transform:none}
+/* ===== 按下的一层圆角薄膜：抬手就走，不拖住点击 ===== */
+.row,.cat-row{position:relative;isolation:isolate}
+.row::before,.cat-row::before{content:"";position:absolute;inset:-3px -10px;z-index:-1;pointer-events:none;
+  border-radius:var(--r-md);background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.55));
+  border:1px solid rgba(155,89,182,.22);
+  box-shadow:0 12px 26px -20px rgba(93,52,124,.55),0 1px 0 rgba(255,255,255,.9) inset;
+  opacity:0;transform:scale(.97);transition:opacity .2s ease,transform .32s var(--ease-out)}
+@media (hover:none){.row:active::before,.cat-row:active::before{opacity:1;transform:none}}
 
 /* 触摸屏没有 hover：按下的那一刻就铺开，和鼠标指过去同一套反馈 */
 @media (hover:none){  .row:active,.cat-row:active{background-size:100% 100%}
@@ -1366,6 +1347,95 @@ main{padding:0 24px}
 .game-hud{font-size:12.3px;color:var(--ink-soft)}
 .snake-tip{color:var(--ink-mute)}
 .snake-bar b{color:var(--ink);font-weight:600}
+/* ===== 本轮：分类配色、随机一条、复制网址、更细的动效 ===== */
+:root{
+  --c-chip:#9B59B6; --c-media:#3D86AE; --c-data:#3C9A74; --c-build:#CE8447; --c-community:#C05F8C; --c-all:#7A6BC4;
+}
+[data-cat="chip"]{--accent:var(--c-chip)}
+[data-cat="media"]{--accent:var(--c-media)}
+[data-cat="data"]{--accent:var(--c-data)}
+[data-cat="build"]{--accent:var(--c-build)}
+[data-cat="community"]{--accent:var(--c-community)}
+[data-cat="all"]{--accent:var(--c-all)}
+
+/* 纸底多两层冷色与暖色，玻璃透过去才有层次 */
+.glow{background:
+  radial-gradient(48% 36% at 6% -8%,rgba(179,136,212,.44),rgba(179,136,212,0) 70%),
+  radial-gradient(40% 30% at 98% 2%,rgba(232,160,200,.36),rgba(232,160,200,0) 72%),
+  radial-gradient(46% 36% at 92% 96%,rgba(110,176,186,.28),rgba(110,176,186,0) 74%),
+  radial-gradient(44% 34% at 3% 88%,rgba(206,132,71,.18),rgba(206,132,71,0) 76%),
+  linear-gradient(180deg,#FDFCFF 0%,#F5F0FA 48%,#FDFBFF 100%)}
+.glow::after{animation-duration:30s}
+
+/* 横幅底沿一条极细的彩线，收住画面 */
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,#B388D4,#6EB0BA 34%,#E8A0C8 62%,#CE8447 84%,#9B59B6);opacity:.62}
+
+/* 阅读进度线也换彩 */
+.meter span{background:linear-gradient(90deg,#9B59B6,#3D86AE 44%,#CE8447)}
+
+/* 分区标题：左侧一道分类色，横线也用渐变 */
+.section-head::after{background:linear-gradient(90deg,rgba(155,89,182,.72),rgba(206,132,71,.32) 42%,rgba(42,33,48,.26) 78%,transparent)}
+.group-head{position:relative;padding-left:14px}
+.group-head::before{content:"";position:absolute;left:0;top:15px;bottom:13px;width:3px;border-radius:2px;
+  background:var(--accent);opacity:.8;transform:scaleY(.35);transform-origin:50% 0;
+  transition:transform .55s var(--ease-ios)}
+.group-head.st.in::before{transform:scaleY(1)}
+
+/* 行：悬停时左侧亮起分类色，整行轻轻抬起 */
+.row{box-shadow:inset 0 0 0 0 var(--accent);
+  transition:background-size .38s var(--ease-ios),box-shadow .44s var(--ease-ios),transform .44s var(--spring)}
+.row:hover,.row:focus-within{box-shadow:inset 3px 0 0 var(--accent),0 16px 30px -30px rgba(42,33,48,.95);transform:translateY(-1px)}
+.row:hover .row-name::after,.row:focus-within .row-name::after{background:var(--accent)}
+.row:hover .row-domain{color:var(--accent)}
+.cat-row:hover .cat-name,.cat-row:hover .cat-num{color:var(--accent)}
+.cat-num{transition:transform .3s var(--ease-ios),color .3s var(--ease-ios)}
+
+/* 筛选胶囊：选中直接落成分类色 */
+.chip.on{background:var(--accent);border-color:transparent;color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 22px -16px var(--accent)}
+.chip.on:hover{background:var(--accent);color:#fff;filter:brightness(1.04)}
+
+/* 首页工具：随机开一条 */
+.home-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:20px}
+.lucky{position:relative;overflow:hidden;border:0;border-radius:999px;padding:9px 18px;
+  font-family:inherit;font-size:13.5px;color:#fff;cursor:pointer;
+  background:linear-gradient(120deg,#9B59B6,#C05F8C 52%,#CE8447);
+  box-shadow:0 14px 26px -16px rgba(120,64,140,.85),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:transform .4s var(--spring),box-shadow .4s var(--ease-ios),filter .3s ease}
+.lucky:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 18px 30px -14px rgba(120,64,140,.92)}
+.lucky:active{transform:scale(.97)}
+.lucky::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);
+  transform:translateX(-130%);animation:luckyShine 4.6s ease-in-out infinite}
+@keyframes luckyShine{0%,70%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+.home-hint{font-size:12.5px;color:var(--ink-mute)}
+
+/* 复制网址的小圆钮 */
+.copy{width:32px;height:32px;border:0;background:none;border-radius:11px;color:var(--ink-mute);
+  display:grid;place-items:center;cursor:pointer;
+  transition:background-color .28s var(--ease-ios),color .28s var(--ease-ios),transform .34s var(--spring)}
+.copy svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6}
+.copy:hover{color:var(--accent);background:rgba(255,255,255,.72)}
+.copy:active{transform:scale(.9)}
+.copy.done{color:var(--c-data)}
+@media (max-width:420px){.row-acts .copy{display:none}}
+
+/* 导航上的收藏数 */
+.nav-count[hidden]{display:none}
+.nav-count{display:inline-block;margin-left:4px;min-width:15px;padding:0 4px;height:15px;line-height:15px;
+  border-radius:999px;background:var(--c-community);color:#fff;font-size:10.5px;font-weight:500;
+  text-align:center;vertical-align:1px}
+
+/* 导航胶囊按当前页面换色 */
+.nav-pill{transition:transform .54s var(--spring),width .54s var(--spring),height .54s var(--spring),
+  opacity .34s ease,background-color .45s var(--ease-ios),box-shadow .45s var(--ease-ios)}
+
+@media (prefers-reduced-motion:reduce){
+  .lucky::after{animation:none;opacity:0}
+  .row:hover,.row:focus-within{transform:none}
+}
+
 </style>
 </head>
 <body>
@@ -1389,7 +1459,7 @@ main{padding:0 24px}
   <span class="nav-pill" aria-hidden="true"></span>
   <a href="#/" data-nav="home">首页</a>
   <a href="#/all" data-nav="all">全部链接</a>
-  <a href="#/saved" data-nav="saved">收藏</a>
+  <a href="#/saved" data-nav="saved">收藏<i class="nav-count" id="nav-saved" hidden>0</i></a>
   <a href="#/game" data-nav="game">游戏</a>
   <a href="#/about" data-nav="about">关于</a>
 </nav>
@@ -1400,6 +1470,11 @@ main{padding:0 24px}
       <!-- ===== 视图：首页 ===== -->
       <section class="view" id="view-home">
         <p class="page-sub" style="margin-top:0">这里留了 <span id="total-count"></span> 个站点，分五类，每条写一句它最值得看的地方。</p>
+
+        <div class="home-tools">
+          <button class="lucky" id="lucky" type="button">手气不错，随机开一条</button>
+          <span class="home-hint">按 / 直接搜索，Esc 清空</span>
+        </div>
 
         <section class="section">
           <div class="section-head">
@@ -1438,7 +1513,7 @@ main{padding:0 24px}
       <!-- ===== 视图：收藏 ===== -->
       <section class="view" id="view-saved" hidden>
         <h2 class="page-title">收藏</h2>
-        <p class="page-sub">只存在这台设备的浏览器里，换电脑或换浏览器不会跟过去。</p>
+        <p class="page-sub" id="saved-sub">只存在这台设备的浏览器里，换电脑或换浏览器不会跟过去。</p>
         <div id="saved-list" style="margin-top:44px"></div>
       </section>
 
@@ -1759,9 +1834,18 @@ const VIEWS = ['home','all','saved','game','about'];
 const CAT_LABEL = {};
 CATS.forEach(c => { CAT_LABEL[c.key] = c.label; });
 const ARROW_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8.5 7H17V15.5"/></svg>';
+const COPY_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.6" y="8.6" width="10.8" height="10.8" rx="2.2"/><path d="M15.4 5.6H6.6a2 2 0 0 0-2 2v8.8"/></svg>';
 const STAR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4L14.95 8.7L22 9.55L16.9 14.4L18.3 21L12 17.6L5.7 21L7.1 14.4L2 9.55L9.05 8.7Z"/></svg>';
 
 const state = {view:'home', q:'', cat:'all'};
+
+/* 游戏键位只在游戏页、且焦点不在输入框里时接管，免得在搜索框打字把角色带走 */
+function gameKeysOn(e){
+  if(state.view !== 'game') return false;
+  const t = e.target;
+  if(t && t.tagName && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return false;
+  return true;
+}
 
 /* ===== 动效 ===== */
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1900,6 +1984,48 @@ function toast(msg){
   toastTimer = setTimeout(() => el.classList.remove('show'), 1900);
 }
 
+function copyUrl(url, btn){
+  const done = () => {
+    const plain = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    toast('已复制 · ' + plain);
+    if(btn){
+      btn.classList.add('done');
+      setTimeout(() => btn.classList.remove('done'), 1200);
+    }
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done, () => legacyCopy(url, done));
+  }else{
+    legacyCopy(url, done);
+  }
+}
+
+function legacyCopy(text, done){
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    done();
+  }catch(err){
+    toast('复制不了，点箭头直接打开吧');
+  }
+}
+
+function paintNavCount(){
+  const el = byId('nav-saved');
+  if(!el) return;
+  const n = saved.size;
+  el.textContent = n;
+  el.hidden = n === 0;
+}
+
 function makeEmpty(text, actionLabel, action){
   const box = document.createElement('div');
   box.className = 'empty';
@@ -1921,6 +2047,7 @@ function makeEmpty(text, actionLabel, action){
 function makeRow(item){
   const row = document.createElement('div');
   row.className = 'row';
+  row.dataset.cat = item.cat;
 
   const link = document.createElement('a');
   link.className = 'row-link';
@@ -1966,6 +2093,18 @@ function makeRow(item){
   open.setAttribute('aria-label', '在新窗口打开 ' + item.name);
   open.innerHTML = ARROW_SVG;
 
+  const copy = document.createElement('button');
+  copy.type = 'button';
+  copy.className = 'copy';
+  copy.title = '复制网址';
+  copy.setAttribute('aria-label', '复制 ' + item.name + ' 的网址');
+  copy.innerHTML = COPY_SVG;
+  copy.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    copyUrl(item.url, copy);
+  });
+
   const star = document.createElement('button');
   star.type = 'button';
   star.className = 'star' + (saved.has(item.id) ? ' on' : '');
@@ -1975,7 +2114,7 @@ function makeRow(item){
   star.setAttribute('aria-label', (saved.has(item.id) ? '取消收藏 ' : '收藏 ') + item.name);
   star.addEventListener('click', () => toggleSave(item.id));
 
-  acts.append(mkBadge(WM_IDS[item.id] ? 'wm' : ''), open, star);
+  acts.append(mkBadge(WM_IDS[item.id] ? 'wm' : ''), copy, open, star);
   row.append(link, acts);
   return row;
 }
@@ -1997,6 +2136,7 @@ function toggleSave(id){
   if(wasSaved){ saved.delete(id); toast('已取消收藏'); }
   else{ saved.add(id); toast('已收藏 · ' + item.name); }
   writeStore(STORE.saved, Array.from(saved));
+  paintNavCount();
 
   if(!wasSaved) popStar(btn);
 
@@ -2025,6 +2165,7 @@ function renderHome(){
     const count = DATA.filter(d => d.cat === c.key).length;
     const row = document.createElement('a');
     row.className = 'cat-row';
+    row.dataset.cat = c.key;
     row.href = '#/all?cat=' + c.key;
 
     const name = document.createElement('span');
@@ -2053,6 +2194,7 @@ function buildChips(){
   all.className = 'chip on';
   all.dataset.cat = 'all';
   all.textContent = '全部';
+  all.setAttribute('aria-pressed', 'true');
   all.addEventListener('click', () => setCat('all'));
   box.append(all);
 
@@ -2062,6 +2204,7 @@ function buildChips(){
     chip.className = 'chip';
     chip.dataset.cat = c.key;
     chip.textContent = c.label;
+    chip.setAttribute('aria-pressed', 'false');
     chip.addEventListener('click', () => setCat(c.key));
     box.append(chip);
   });
@@ -2069,7 +2212,11 @@ function buildChips(){
 
 function setCat(key){
   state.cat = key;
-  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.cat === key));
+  document.querySelectorAll('.chip').forEach(c => {
+    var on = c.dataset.cat === key;
+    c.classList.toggle('on', on);
+    c.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
   renderAll();
   armReveals(byId('all-results'));
 }
@@ -2106,6 +2253,7 @@ function renderAll(){
       wrap.className = 'group';
       const head = document.createElement('div');
       head.className = 'group-head';
+      head.dataset.cat = c.key;
       const h3 = document.createElement('h3');
       h3.textContent = c.label;
       const span = document.createElement('span');
@@ -2120,6 +2268,7 @@ function renderAll(){
     wrap.className = 'group';
     const head = document.createElement('div');
     head.className = 'group-head';
+    head.dataset.cat = state.cat === 'all' ? 'all' : state.cat;
     const h3 = document.createElement('h3');
     h3.textContent = state.cat === 'all' ? '搜索结果' : CAT_LABEL[state.cat];
     const span = document.createElement('span');
@@ -2136,6 +2285,8 @@ function renderSaved(){
   const box = byId('saved-list');
   box.innerHTML = '';
   const items = DATA.filter(d => saved.has(d.id));
+  const sub = byId('saved-sub');
+  if(sub) sub.textContent = items.length ? '已收藏 ' + items.length + ' 条，只存在这台设备的浏览器里。' : '只存在这台设备的浏览器里，换电脑或换浏览器不会跟过去。';
 
   if(items.length === 0){
     box.append(makeEmpty('还没有收藏。在每条链接右侧点一下星号，它就会出现在这里。', '去看全部链接', () => {
@@ -2325,190 +2476,6 @@ function initForm(){
   });
 }
 
-/* ===== 经典小游戏：贪吃蛇 ===== */
-function initSnake(){
-  const cv = byId('snake-canvas');
-  const scoreEl = byId('snake-score');
-  const bestEl = byId('snake-best');
-  const startBtn = byId('snake-start');
-  const tip = byId('snake-tip');
-  if(!cv || !startBtn) return;
-  const ctx = cv.getContext('2d');
-  if(!ctx) return;
-  const N = 15;
-  const STEP = 120;
-  const BEST_KEY = 'liuzhi.snake.v1';
-
-  let best = 0;
-  try{ best = Number(localStorage.getItem(BEST_KEY)) || 0; }catch(err){}
-  bestEl.textContent = String(best);
-
-  let cellPx = 24;
-  const dpr = Math.max(1, window.devicePixelRatio || 1);
-  let snake = [], dir = {x:1, y:0}, want = {x:1, y:0}, food = {x:0, y:0};
-  let score = 0, running = false, acc = 0, last = 0, raf = 0;
-
-  function resize(){
-    const w = cv.clientWidth;
-    if(!w) return;
-    const size = Math.floor(w / N) * N;
-    cv.width = Math.round(size * dpr);
-    cv.height = Math.round(size * dpr);
-    cv.style.height = size + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cellPx = size / N;
-    draw();
-  }
-
-  function placeFood(){
-    const free = [];
-    for(let y = 0; y < N; y++) for(let x = 0; x < N; x++){
-      if(!snake.some(s => s.x === x && s.y === y)) free.push({x:x, y:y});
-    }
-    food = free.length ? free[Math.floor(Math.random() * free.length)] : {x:0, y:0};
-  }
-
-  function roundRect(x, y, w, h, r){
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + w, y, x + w, y + h, r);
-    ctx.arcTo(x + w, y + h, x, y + h, r);
-    ctx.arcTo(x, y + h, x, y, r);
-    ctx.arcTo(x, y, x + w, y, r);
-    ctx.closePath();
-  }
-
-  function draw(){
-    const size = cellPx * N;
-    ctx.clearRect(0, 0, size, size);
-    ctx.fillStyle = 'rgba(255,255,255,.42)';
-    ctx.fillRect(0, 0, size, size);
-    ctx.strokeStyle = 'rgba(155,89,182,.09)';
-    ctx.lineWidth = 1;
-    for(let i = 1; i < N; i++){
-      ctx.beginPath(); ctx.moveTo(i * cellPx, 0.5); ctx.lineTo(i * cellPx, size); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0.5, i * cellPx); ctx.lineTo(size, i * cellPx); ctx.stroke();
-    }
-    ctx.fillStyle = '#D67492';
-    ctx.beginPath();
-    ctx.arc((food.x + 0.5) * cellPx, (food.y + 0.5) * cellPx, cellPx * 0.34, 0, Math.PI * 2);
-    ctx.fill();
-    const pad = Math.max(1.5, cellPx * 0.12);
-    for(let i = snake.length - 1; i >= 0; i--){
-      const s = snake[i];
-      ctx.fillStyle = i === 0 ? '#9B59B6' : (i % 2 ? '#B681CE' : '#AD76C5');
-      roundRect(s.x * cellPx + pad, s.y * cellPx + pad,
-        cellPx - pad * 2, cellPx - pad * 2, Math.max(3, cellPx * 0.28));
-      ctx.fill();
-    }
-  }
-
-  function reset(){
-    snake = [{x:7, y:7}, {x:6, y:7}, {x:5, y:7}];
-    dir = {x:1, y:0};
-    want = {x:1, y:0};
-    score = 0;
-    scoreEl.textContent = '0';
-    placeFood();
-    draw();
-  }
-
-  function finish(){
-    running = false;
-    cancelAnimationFrame(raf);
-    if(score > best){
-      best = score;
-      bestEl.textContent = String(best);
-      try{ localStorage.setItem(BEST_KEY, String(best)); }catch(err){}
-      tip.textContent = '这局 ' + score + ' 分，破了纪录。';
-    }else{
-      tip.textContent = '这局 ' + score + ' 分。';
-    }
-    startBtn.textContent = '再来一局';
-  }
-
-  function step(){
-    dir = want;
-    const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
-    if(head.x < 0 || head.y < 0 || head.x >= N || head.y >= N){ finish(); return; }
-    for(let i = 0; i < snake.length - 1; i++){
-      if(snake[i].x === head.x && snake[i].y === head.y){ finish(); return; }
-    }
-    snake.unshift(head);
-    if(head.x === food.x && head.y === food.y){
-      score++;
-      scoreEl.textContent = String(score);
-      placeFood();
-    }else{
-      snake.pop();
-    }
-    draw();
-  }
-
-  function loop(now){
-    if(!running) return;
-    acc += now - last;
-    last = now;
-    while(acc >= STEP){
-      acc -= STEP;
-      step();
-      if(!running) return;
-    }
-    raf = requestAnimationFrame(loop);
-  }
-
-  function turn(nx, ny){
-    if(nx === -dir.x && ny === -dir.y) return;
-    want = {x:nx, y:ny};
-  }
-
-  startBtn.addEventListener('click', () => {
-    reset();
-    tip.textContent = '方向键或滑动控制，吃到紫点长一截。';
-    startBtn.textContent = '重开';
-    running = true;
-    acc = 0;
-    last = performance.now();
-    cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(loop);
-  });
-
-  window.addEventListener('keydown', event => {
-    const k = event.key;
-    if(k === 'ArrowLeft' || k === 'a') turn(-1, 0);
-    else if(k === 'ArrowRight' || k === 'd') turn(1, 0);
-    else if(k === 'ArrowUp' || k === 'w') turn(0, -1);
-    else if(k === 'ArrowDown' || k === 's') turn(0, 1);
-    else return;
-    if(running) event.preventDefault();
-  });
-
-  let fromX = 0, fromY = 0, tracking = false;
-  cv.addEventListener('pointerdown', e => {
-    tracking = true;
-    fromX = e.clientX;
-    fromY = e.clientY;
-    try{ cv.setPointerCapture(e.pointerId); }catch(err){}
-  });
-  cv.addEventListener('pointermove', e => {
-    if(!tracking) return;
-    const dx = e.clientX - fromX, dy = e.clientY - fromY;
-    if(Math.abs(dx) < 16 && Math.abs(dy) < 16) return;
-    if(Math.abs(dx) > Math.abs(dy)) turn(dx > 0 ? 1 : -1, 0);
-    else turn(0, dy > 0 ? 1 : -1);
-    tracking = false;
-  });
-  cv.addEventListener('pointerup', () => { tracking = false; });
-  cv.addEventListener('pointercancel', () => { tracking = false; });
-
-  cv._resize = resize;
-  window.addEventListener('resize', resize);
-  reset();
-  resize();
-  setTimeout(resize, 80);
-}
-
-
 /* ===== 经典像素小游戏 ===== */
 var PX = {
   bg: '#151122', bg2: '#1E1930', grid: '#241E3A', ink: '#F4EEE1',
@@ -2681,6 +2648,7 @@ function initSnake() {
   }
 
   window.addEventListener('keydown', function (e) {
+    if(!gameKeysOn(e)) return;
     var k = e.key.toLowerCase();
     if (k === 'arrowleft' || k === 'a') turn(-1, 0);
     else if (k === 'arrowright' || k === 'd') turn(1, 0);
@@ -2933,6 +2901,7 @@ function initKof() {
   }
 
   window.addEventListener('keydown', function (e) {
+    if(!gameKeysOn(e)) return;
     var k = e.key.toLowerCase();
     if (k === 'a' || k === 'arrowleft') keys.left = true;
     else if (k === 'd' || k === 'arrowright') keys.right = true;
@@ -3165,6 +3134,7 @@ function initContra() {
   });
 
   window.addEventListener('keydown', function (e) {
+    if(!gameKeysOn(e)) return;
     var k = e.key.toLowerCase();
     if (k === 'a' || k === 'arrowleft') keys.left = true;
     else if (k === 'd' || k === 'arrowright') keys.right = true;
@@ -3443,6 +3413,7 @@ function initTetris() {
   }
 
   window.addEventListener('keydown', function (e) {
+    if(!gameKeysOn(e)) return;
     var k = e.key.toLowerCase();
     if (k === 'arrowleft' || k === 'a') keys.left = true;
     else if (k === 'arrowright' || k === 'd') keys.right = true;
@@ -3623,6 +3594,7 @@ function initBreakout() {
   });
 
   window.addEventListener('keydown', function (e) {
+    if(!gameKeysOn(e)) return;
     var k = e.key.toLowerCase();
     if (k === 'a' || k === 'arrowleft') keys.left = true;
     else if (k === 'd' || k === 'arrowright') keys.right = true;
@@ -3843,6 +3815,7 @@ function initInvaders() {
   });
 
   window.addEventListener('keydown', function (e) {
+    if(!gameKeysOn(e)) return;
     var k = e.key.toLowerCase();
     if (k === 'a' || k === 'arrowleft') keys.left = true;
     else if (k === 'd' || k === 'arrowright') keys.right = true;
@@ -4281,6 +4254,7 @@ function initMoba() {
   });
 
   window.addEventListener('keydown', function (e) {
+    if(!gameKeysOn(e)) return;
     var k = e.key.toLowerCase();
     if (k === 'a' || k === 'arrowleft') keys.left = true;
     else if (k === 'd' || k === 'arrowright') keys.right = true;
@@ -4346,7 +4320,9 @@ function initGames() {
     invaders: initInvaders(),
     moba: initMoba()
   };
+  var cur = 'snake';
   function show(key) {
+    cur = key;
     Object.keys(games).forEach(function (k) {
       var pane = byId('pane-' + k);
       if (pane) pane.hidden = k !== key;
@@ -4354,6 +4330,19 @@ function initGames() {
       else if (games[k]) games[k].pause();
     });
   }
+  sw.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (!e.target.closest || !e.target.closest('.game-switch')) return;
+    var on = sw.querySelector('button.on');
+    if (!on) return;
+    var list = Array.prototype.slice.call(sw.querySelectorAll('button[data-game]'));
+    var i = list.indexOf(on);
+    if (i < 0) return;
+    i = e.key === 'ArrowRight' ? (i + 1) % list.length : (i - 1 + list.length) % list.length;
+    e.preventDefault();
+    list[i].click();
+    list[i].focus();
+  });
   sw.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-game]');
     if (!b) return;
@@ -4364,6 +4353,8 @@ function initGames() {
     });
     show(b.dataset.game);
   });
+  window.__gamesShow = function () { show(cur); };
+  window.__pauseGames = function () { Object.keys(games).forEach(function (k) { var g = games[k]; if (g && g.pause) g.pause(); }); };
   show('snake');
 }
 
@@ -4388,11 +4379,14 @@ function showView(view){
   });
   const sc = byId('snake-canvas');
   if(sc && sc._resize) setTimeout(sc._resize, 80);
+  if(view === 'game'){ if(window.__gamesShow) window.__gamesShow(); }
+  else if(window.__pauseGames) window.__pauseGames();
   updateNavPill(true);
 }
 
 /* ===== 顶格动效：导航胶囊、方向性转场、玻璃追光 ===== */
 const VIEW_ORDER = VIEWS.slice();
+const NAV_ACCENT = {home:'155,89,182', all:'61,134,174', saved:'192,95,140', game:'206,132,71', about:'60,154,116'};
 let navPillSeeded = false;
 let prevView = 'home';
 
@@ -4408,6 +4402,9 @@ function updateNavPill(animate){
   const x = ar.left - nr.left;
   const noanim = !animate || !navPillSeeded;
   if(noanim) pill.classList.add('noanim');
+  const ac = NAV_ACCENT[active.dataset.nav] || '155,89,182';
+  pill.style.backgroundColor = 'rgba(' + ac + ',.14)';
+  pill.style.boxShadow = 'inset 0 0 0 .5px rgba(' + ac + ',.24),inset 0 1px 0 rgba(255,255,255,.8),0 12px 24px -20px rgba(' + ac + ',.85)';
   pill.style.width = ar.width.toFixed(1) + 'px';
   pill.style.height = ar.height.toFixed(1) + 'px';
   pill.style.transform = 'translate3d(' + x.toFixed(1) + 'px,-50%,0)';
@@ -4694,48 +4691,6 @@ function initInkScene(){
   });
 }
 
-/* ===== 一下点亮、稍后就开门：第一下播完圆角动画自己打开，第二下立刻打开 ===== */
-let armedEl = null, armTimer = 0, openTimer = 0;
-const OPEN_DELAY = 760;
-function clearArm(){
-  if(armedEl) armedEl.classList.remove('armed');
-  armedEl = null;
-  if(armTimer) clearTimeout(armTimer);
-  armTimer = 0;
-  if(openTimer) clearTimeout(openTimer);
-  openTimer = 0;
-}
-function initArmOpen(){
-  document.addEventListener('click', e => {
-    /* 键盘回车（detail 为 0）直接放行，不为难键盘用户 */
-    if(e.detail === 0) return;
-    const target = e.target;
-    if(!(target instanceof Element)) return;
-    if(target.closest('.star')) return;
-    const link = target.closest('.row-link, .cat-row');
-    if(!link) return;
-
-    const box = link.closest('.row') || link;
-    if(box.classList.contains('armed')){
-      clearArm();                      /* 连点第二下：直接放行 */
-      return;
-    }
-
-    e.preventDefault();
-    clearArm();
-    box.classList.add('armed');
-    armedEl = box;
-    armTimer = setTimeout(clearArm, 3200);
-    const href = link.getAttribute('href');
-    openTimer = setTimeout(() => {
-      openTimer = 0;
-      clearArm();
-      if(href) location.href = href;
-    }, OPEN_DELAY);
-  });
-  document.addEventListener('scroll', clearArm, {passive:true});
-}
-
 /* ===== 滚动：横幅视差、首屏退场、进度线与回顶 ===== */
 function initMotion(){
   const photo = byId('hero-photo');
@@ -4780,6 +4735,37 @@ function initMotion(){
   paint();
 }
 
+/* ===== 随机一条 + 键盘快捷 ===== */
+function initNice(){
+  const lucky = byId('lucky');
+  if(lucky){
+    lucky.addEventListener('click', () => {
+      if(!DATA.length) return;
+      const d = DATA[Math.floor(Math.random() * DATA.length)];
+      toast('开到 · ' + d.name);
+      window.open(d.url, '_blank', 'noopener');
+    });
+  }
+
+  document.addEventListener('keydown', event => {
+    const t = event.target;
+    const typing = t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName || '');
+    if(event.key === '/' && !typing && state.view !== 'game'){
+      event.preventDefault();
+      if(state.view !== 'all') location.hash = '#/all';
+      setTimeout(() => byId('q').focus(), state.view === 'all' ? 0 : 90);
+      return;
+    }
+    if(event.key === 'Escape' && document.activeElement === byId('q')){
+      byId('q').value = '';
+      state.q = '';
+      byId('q-clear').hidden = true;
+      renderAll();
+      armReveals(byId('all-results'));
+    }
+  });
+}
+
 /* ===== 启动 ===== */
 function init(){
   byId('total-count').textContent = DATA.length;
@@ -4792,6 +4778,7 @@ function init(){
   renderDrafts();
   renderAll();
   renderSaved();
+  paintNavCount();
 
   const q = byId('q');
   q.addEventListener('input', () => {
@@ -4808,10 +4795,10 @@ function init(){
 
   initMotion();
   initInkScene();
-  initArmOpen();
   initNavPill();
   initGlassSpot();
   initGames();
+  initNice();
   window.addEventListener('hashchange', onRoute);
   onRoute();
 }
