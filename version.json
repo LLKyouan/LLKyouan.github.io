@@ -1,6 +1,6 @@
 {
- "versionCode": 42,
- "versionName": "4.2",
- "notes": "链接改成站内直接打开，站外跳转会被拦下；启动自己问版本、有新版直接下载弹安装。",
+ "versionCode": 43,
+ "versionName": "4.3",
+ "notes": "站外跳转先问一句，可以在 App 里接着看；返回不再白屏。新版本提示卡换成圆角毛玻璃。",
  "url": "https://llkyouan.github.io/youan-links.apk"
 }
