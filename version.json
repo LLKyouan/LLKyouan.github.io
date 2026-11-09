@@ -1,6 +1,6 @@
 {
-  "code": 88,
-  "name": "6.2",
+  "versionCode": 88,
+  "versionName": "6.2",
   "notes": "游戏那条里多了 2048 和扫雷；换页和按键都改成 Q 弹，按下去会回弹。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
