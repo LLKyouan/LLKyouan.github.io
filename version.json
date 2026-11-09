@@ -1,6 +1,6 @@
 {
-  "versionCode": 78,
-  "versionName": "5.18",
-  "notes": "导航条贴顶以后点不动的地方修好了，看见哪儿就能点哪儿；守夜的路线不再漏到棋盘外，游戏那条右边留一段渐隐。",
+  "versionCode": 79,
+  "versionName": "5.19",
+  "notes": "首页多了一个「累计打开」，网页和 App 一起算，同一台机一小时记一次；数不准就点旁边的刷新再数一遍。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
