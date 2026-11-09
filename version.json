@@ -1,6 +1,6 @@
 {
-  "versionCode": 79,
-  "versionName": "5.19",
-  "notes": "首页多了一个「累计打开」，网页和 App 一起算，同一台机一小时记一次；数不准就点旁边的刷新再数一遍。",
+  "versionCode": 80,
+  "versionName": "5.20",
+  "notes": "更新记录补到最早一版，收进一张卡，点一下展开；隐私说明重写了一遍，去了套话。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
