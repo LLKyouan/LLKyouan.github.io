@@ -1,6 +1,6 @@
 {
-  "versionCode": 89,
-  "versionName": "6.3",
-  "notes": "换页那下轻了：整页不再跟着放大缩小，只抬起一点弹回去。字不用每帧重画，背景在换页那半秒也停一下呼吸。",
+  "versionCode": 90,
+  "versionName": "6.4",
+  "notes": "音效从四套变八套：木鱼、玻璃、水滴、芯片之外，又添了琴弦、铃铛、纸页、气泡，设置里排成两行，点一下就能连着听。App 里每套还多了赢和输两声：扫雷挖完给一声，踩雷和 2048 走死各给一声往下的。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
