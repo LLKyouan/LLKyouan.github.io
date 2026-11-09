@@ -2,5 +2,5 @@
   "versionCode": 85,
   "versionName": "5.25",
   "notes": "悔棋改成只退自己那步，对方面上的子不动；对方要是已经接了一步，就提示这手退不回来了。",
-  "apk": "youan-links.apk"
+  "url": "https://llkyouan.github.io/youan-links.apk"
 }
