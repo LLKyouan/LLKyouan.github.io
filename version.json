@@ -1,6 +1,6 @@
 {
-  "versionCode": 77,
-  "versionName": "5.17",
-  "notes": "网址一律按 https 打开：不写前缀会自己补上，写了 http 也升成 https；域名不像样的当场拦下。",
+  "versionCode": 78,
+  "versionName": "5.18",
+  "notes": "导航条贴顶以后点不动的地方修好了，看见哪儿就能点哪儿；守夜的路线不再漏到棋盘外，游戏那条右边留一段渐隐。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
