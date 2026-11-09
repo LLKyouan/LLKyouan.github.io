@@ -1,6 +1,6 @@
 {
-  "versionCode": 81,
-  "versionName": "5.21",
-  "notes": "同一个 Wi-Fi 下两台手机能直接对下象棋和五子棋，不用服务器也不用流量。",
+  "versionCode": 82,
+  "versionName": "5.22",
+  "notes": "更新记录补齐了：1.0 一路列到 3.9，现在从第一版列到今天。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
