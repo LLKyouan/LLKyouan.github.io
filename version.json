@@ -1,6 +1,6 @@
 {
-  "versionCode": 73,
-  "versionName": "5.13",
-  "notes": "人数会自己滚上去，复制完扫一道光，音效开关能推着走，标题比以前先出来。",
+  "versionCode": 75,
+  "versionName": "5.15",
+  "notes": "四套声音可以换；多了塔防守夜和弹幕深空；返回键按安卓习惯，首页连按两次才退。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
