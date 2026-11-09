@@ -1,6 +1,6 @@
 {
-  "versionCode": 86,
-  "versionName": "6.0",
-  "notes": "换页和背景重做过，来回调页不再顿；更新那一行会自己报进度，下好了在设置页点一下就能装。版本号后面标出了适配的安卓区间。",
+  "code": 88,
+  "name": "6.2",
+  "notes": "游戏那条里多了 2048 和扫雷；换页和按键都改成 Q 弹，按下去会回弹。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
