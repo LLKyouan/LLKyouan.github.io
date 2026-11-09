@@ -1,6 +1,6 @@
 {
-  "versionCode": 88,
-  "versionName": "6.2",
-  "notes": "游戏那条里多了 2048 和扫雷；换页和按键都改成 Q 弹，按下去会回弹。",
+  "versionCode": 89,
+  "versionName": "6.3",
+  "notes": "换页那下轻了：整页不再跟着放大缩小，只抬起一点弹回去。字不用每帧重画，背景在换页那半秒也停一下呼吸。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
