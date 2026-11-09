@@ -1,6 +1,6 @@
 {
-  "versionCode": 82,
-  "versionName": "5.22",
-  "notes": "更新记录补齐了：1.0 一路列到 3.9，现在从第一版列到今天。",
+  "versionCode": 83,
+  "versionName": "5.23",
+  "notes": "棋桌上多了声音和「悔棋」：落子一声、吃子一声，悔棋退一步，两边一起退。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
