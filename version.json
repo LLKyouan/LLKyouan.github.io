@@ -1,6 +1,6 @@
 {
-  "versionCode": 76,
-  "versionName": "5.16",
-  "notes": "游戏页收成一排，守夜、深空和六个像素的都在同一条里，左右推着选。",
+  "versionCode": 77,
+  "versionName": "5.17",
+  "notes": "网址一律按 https 打开：不写前缀会自己补上，写了 http 也升成 https；域名不像样的当场拦下。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
