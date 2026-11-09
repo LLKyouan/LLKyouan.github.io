@@ -1,6 +1,6 @@
 {
-  "versionCode": 85,
-  "versionName": "5.25",
-  "notes": "悔棋改成只退自己那步，对方面上的子不动；对方要是已经接了一步，就提示这手退不回来了。",
+  "versionCode": 86,
+  "versionName": "6.0",
+  "notes": "换页和背景重做过，来回调页不再顿；更新那一行会自己报进度，下好了在设置页点一下就能装。版本号后面标出了适配的安卓区间。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
