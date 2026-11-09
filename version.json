@@ -1,6 +1,6 @@
 {
-  "code": 91,
-  "name": "6.5",
+  "versionCode": 91,
+  "versionName": "6.5",
   "notes": "2048 上下滑不动修好了：手指按到牌面上时先把整页的滚动拦住，上下左右四个方向都认，抬手就给一下。2048 也不再一合并就响赢的那声，只有真合出 2048 才响；方块顶上那行分数不再把「最高」冲掉。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
