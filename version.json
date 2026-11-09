@@ -1,1 +1,6 @@
-{"versionCode": 70, "versionName": "5.7", "notes": "补了一句统计口径的说明：只记安装次数，不含身份信息。顺手核了一遍清单与页面，没有可疑外链。", "url": "https://llkyouan.github.io/youan-links.apk"}
+{
+  "versionCode": 71,
+  "versionName": "5.11",
+  "notes": "音效换成木鱼和快板：轻点、预备是木头敲一下，打开、换页是竹板拍一下。文案重写了一遍，隐私单独成段，更新记录收进一张卡。",
+  "url": "https://llkyouan.github.io/youan-links.apk"
+}
