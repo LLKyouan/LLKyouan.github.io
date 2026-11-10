@@ -1,6 +1,6 @@
 {
-  "versionCode": 93,
-  "versionName": "6.7",
-  "notes": "游戏那条最末多了一台电子琴：两个八度，白键黑键都在，按下就响，响完自己落，不用抬手；几根手指一起按能按出和弦，顶上那颗还能换高八度。按手机的导航方式也让了位置：三键的按键条、手势那条、挖孔刘海都不再压住内容。",
+  "versionCode": 94,
+  "versionName": "6.8",
+  "notes": "改名 ChipCase；电子琴多了一块横屏大钢琴（三个八度）；钢琴声换成按弦算的真钢琴味，琴有了自己的图标。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
