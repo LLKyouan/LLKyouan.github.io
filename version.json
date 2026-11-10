@@ -1,6 +1,6 @@
 {
-  "versionCode": 94,
-  "versionName": "6.8",
-  "notes": "改名 ChipCase；电子琴多了一块横屏大钢琴（三个八度）；钢琴声换成按弦算的真钢琴味，琴有了自己的图标。",
+  "versionCode": 95,
+  "versionName": "6.9",
+  "notes": "新增「开发板」页：填 ESP32-S3 的 IP 就能看芯片、固件、内存、信号、温度、引脚等实时数据，可扫局域网找板子，也可自动刷新。",
   "url": "https://llkyouan.github.io/youan-links.apk"
 }
